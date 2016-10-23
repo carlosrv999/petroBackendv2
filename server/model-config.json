@@ -13,6 +13,10 @@
       "./mixins"
     ]
   },
+  "AccessToken": {
+    "dataSource": "easyPetro",
+    "public": false
+  },
   "Usuario": {
     "dataSource": "easyPetro",
     "public": true
