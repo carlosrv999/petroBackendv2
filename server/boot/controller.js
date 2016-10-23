@@ -35,7 +35,11 @@ module.exports = function(app){
                     mostrarMensaje: "El email ya esta registrado",
                 });
 			}
-			return res.json(userInstance);
+			return res.render('login', {
+				modo: "gggggg",
+                mostrarTitulo: "Registro exitoso",
+                mostrarMensaje: "Ya puede inicial sesion"
+			})
 		})
 	})
 
@@ -55,7 +59,7 @@ module.exports = function(app){
 				return res.render('login', {
 					modo: "gggggg",
                     mostrarTitulo: "Error en ingreso",
-                    mostrarMensaje: "El usuario y/o password no son correctos",
+                    mostrarMensaje: "El usuario y/o password no son correctos"
 				})
 			}
 			res.cookie('accessToken', token);
@@ -175,7 +179,12 @@ module.exports = function(app){
 			},
 			userId : idUsuario
 		}, function(err, obj){
-			if(err) return console.log('error en : ', err);
+			if(err) {
+				console.log('error en : ', err);
+				return res.render('crearestacion', {
+					message : 'error en crear'
+				})
+			}
 			console.log(obj);
 			Estacion.find({
 				where : {
