@@ -39,6 +39,28 @@ module.exports = function(app){
 		return res.render('login');
 	})
 
+	router.post('/login', function(req,res){
+		var correo = req.body.form_email;
+		var password = req.body.form_password;
+		//console.log(correo);
+		//console.log(password);
+		Usuario.login({
+			email : correo,
+			password : password
+		}, function(err, token){
+			if(err){
+				console.log("error en ingreso", err);
+				return res.render('login', {
+					modo: "gggggg",
+                    mostrarTitulo: "Error en ingreso",
+                    mostrarMensaje: "El usuario y/o password no son correctos",
+				})
+			}
+			console.log(token.id);
+			return res.json(token);
+		});
+	})
+
 
 
 	app.use(router);
