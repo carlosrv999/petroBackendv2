@@ -7,12 +7,10 @@
   },
   "properties": {
     "email": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "password": {
-      "type": "string",
-      "required": true
+      "type": "string"
     }
   },
   "validations": [],
@@ -20,7 +18,7 @@
     "estacions": {
       "type": "hasMany",
       "model": "Estacion",
-      "foreignKey": "idUsuario"
+      "foreignKey": "userId"
     }
   },
   "acls": [],

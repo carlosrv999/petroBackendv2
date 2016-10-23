@@ -16,11 +16,11 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+app.use(loopback.token());
+
 app.use(loopback.static(path.resolve(__dirname, '../client')));
 
-app.use(loopback.token({
-    model: app.models.accessToken
-}));
+
 
 app.start = function() {
   // start the web server

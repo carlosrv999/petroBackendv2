@@ -11,6 +11,9 @@
     },
     "geoPoint": {
       "type": "geopoint"
+    },
+    "userId": {
+      "type": "string"
     }
   },
   "validations": [],
@@ -18,7 +21,7 @@
     "usuario": {
       "type": "belongsTo",
       "model": "Usuario",
-      "foreignKey": "idUsuario"
+      "foreignKey": "userId"
     },
     "productos": {
       "type": "hasMany",

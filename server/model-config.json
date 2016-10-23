@@ -17,6 +17,10 @@
     "dataSource": "easyPetro",
     "public": false
   },
+  "ACL": {
+    "dataSource": "easyPetro",
+    "public": false
+  },
   "Usuario": {
     "dataSource": "easyPetro",
     "public": true

@@ -1,0 +1,323 @@
+doctype html
+html
+  head
+    title Menu Estaciones
+    meta(charset='UTF-8')
+    meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")  
+    link(rel='stylesheet' type='text/css' href='../css/semantic.min.css')
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+    script(src="../js/semantic.min.js")
+    style.
+      .item_tr:hover {
+        background: #A1CCEC;
+      }
+    style.
+      i.trash.icon.icono_trash {
+        color: #4183C4;
+        cursor: pointer;
+      }
+    
+  body
+    -var i=1
+    .ui.large.top.menu
+      .ui.container        
+        a.active.selection.item(href="/estaciones?access_token="+accessToken) Estaciones
+        a.item(href="/productos?access_token="+accessToken) Productos
+      .rigth.menu
+        .item
+          .ui.icon.input
+            input(type='text' placeholder='search..')
+            i.search.icon
+        .item
+          a.ui.black.button(href="/logout?access_token="+accessToken) Log Out
+    .ui.container
+      if mostrarMensaje && mostrarTitulo
+        .ui.message
+          i.close.icon
+          .header
+            | #{mostrarTitulo}
+          p
+            | #{mostrarMensaje}
+      
+      //---------QUITANDO EL FORMULARIO Y EL BOTON INPUT EDITAR
+      //form(action='/producto/editar' method='post')
+      table.ui.sticky.table
+        thead
+          tr
+            th.ui.center.aligned Id
+            th.ui.center.aligned Nombre
+            th.ui.center.aligned Latitud
+            th.ui.center.aligned Longitud
+            //th.ui.center.aligned Precio
+            //th.ui.center.aligned Stock
+          //  th.ui.center.aligned Descripcion
+          //  th.ui.center.aligned Categoria
+        tbody
+          each estacion in objResult_estacion
+
+            tr.ui.form.item_tr
+              .inline.fields
+                th.ui.center.aligned 
+                  .two.fields
+                    .field
+                      a(href="/estacion/editar?id=" + estacion.id)
+                        i.write.icon.icono_write(attr_id=estacion.id)
+
+                      i.trash.icon.icono_trash(attr_id=estacion.id)
+
+                    .six.wide.fields.left.floated
+                      .fields
+                        .one.wide.field
+                          //input(type='radio' name='idEstacion' value=estacion.id)
+                          label #{estacion.id}
+
+
+
+
+                th.ui.center.aligned
+                  // MODO FUNCION
+                  // -label(onClick="show('" + producto.nombre + "')" ) #{producto.nombre}
+                  -console.log('---->***',estacion.usuario.nombre)
+                  //- label.label_show(attr_nombre=producto.nombre, attr_id=producto.id, #{producto.nombre}
+                  label.label_show(attr_obj=JSON.stringify(estacion)) #{estacion.nombre}
+                  -i=i+1
+
+                th.ui.center.aligned #{estacion.geoPoint.lat}
+                th.ui.center.aligned #{estacion.geoPoint.lng}
+        
+      a.ui.black.button#boton_probando Editar
+      a.ui.black.button(href="/crearEstacion?access_token="+accessToken) Crear
+      
+      
+      
+
+      // template
+      div.ui.modal.principal
+        div.header Informacion
+        div.content
+          h4 Id
+          #producto_id
+          h4 Nombre
+          #producto_nombre
+          h4 Precio
+          #producto_precio
+          h4 Cantidad
+          #producto_cantidad
+          h4 Descripcion
+          #producto_descripcion
+          h4 Categoria
+          #producto_categoria
+        //p Id: #{producto.id}
+        //p Nombre: #{producto.nombre}
+        //p Precio: #{producto.precio}
+        //p Cantidad: #{producto.cantidad}
+        //p Descripcion: #{producto.descripcion}
+
+
+      .ui.small.modal
+        .header Borrar Producto
+        .content ¿Estas seguro de eliminar este producto?
+        .actions
+          .ui.negative.button No
+          .ui.positive.right.labeled.icon.button Yes
+            i.checkmark.icon
+        form#form_producto_delete(action="/producto/eliminar" method="post")
+          input#input_categoria_delete(name="id" type="hidden")
+
+  script.
+    $(".message .close")
+      .on("click",function(){
+        $(this)
+          .closest(".message")
+          .transition("fade");
+      });
+
+    if(!{modo}){
+      $(".ui.message").addClass("positive");
+    }else{
+      $(".ui.message").addClass("negative");
+    }
+
+  script.
+
+    //- var objResult = !{JSON.stringify(objResult_producto)};
+
+    //- function Products() {
+    //-   if(objResult) {
+    //-     this.users = objResult;
+    //-   }
+    //- }
+
+    //- Products.prototype.buildTable = function() {
+    //-   var $table = document.createElement("table");
+    //-   var $thead = document.createElement("thead");
+    //-   $table.appendChild($thead);
+    //-   $tr.text = "";
+    //-   ... etc
+    //-   this.users.forEach(function(user) {});
+    //- };
+
+    //- Products.prototype.rebuildTable = function() {
+
+    //- };
+
+    //- Products.prototype.deleteUser = function() {
+
+    //- };
+
+    //- Products.prototype.insertUser = function() {
+
+    //- };
+
+    //- Products.prototype.updateUser = function() {
+
+    //- };
+
+    //- $(".eliminar_icono").click(function() {
+    //- });
+
+    $(".icono_trash").on('click',function(){
+      var idProductoDelete = $(this).attr("attr_id");
+      $('.ui.small.modal')
+      .modal({
+        closable:false,
+        onApprove: function() {
+
+          $("#input_categoria_delete").attr("value",idProductoDelete);
+          $("#form_producto_delete").submit();
+          //- if(!!idProductoDelete) {
+          //-   $.get("/producto/eliminar?id="+idProductoDelete, function(payload) {
+              //- var message = "", title = "";
+
+              //- if(payload && payload.success) {
+              //-   message = "Producto eliminado";
+              //-   title = "El producto_nombre " + payload.id + " fue eliminado exitosamente";
+              //-   $("#messageBox").addClass("success");  
+              //-   // deleteUser(payload.id)
+              //-   // rebuildTable();
+              //- } else {
+              //-   message = "Error en eliminar producto";
+              //-   title = "El producto " + payload.id + " no se eliminó";
+              //-   $("#messageBox").addClass("negative");  
+              //- }
+
+              //- $("#messageBox_message").text(message);
+              //- $("#messageBox_title").text(title);
+              //- $("#messageBox").show();  
+
+              //- console.log("->", payload);
+          //-   });
+          //-   location.reload();
+          //- }
+        } 
+      })
+      .modal('show');
+    });
+
+  // HARCODEO EN MODAL 
+    - console.log(i) 
+    - var code = "<script>", keyId = "";
+    - for(var j = 1; j <= objResult_producto.length; j++ ) {
+    -   keyId = "'#modal-" + j + "'";
+    -   code += "$(" + keyId + ").click(function(e) {e.preventDefault(); $('.ui.modal').modal('show'); });"
+    -}
+    - code += "</script>"
+    !=code
+    
+  //- script.
+  //-   $(".write.icon").on("click",function(event){
+  //-     var idProducto = $(this).attr('attr_id');
+  //-     $.post('/estacion/editar',{idProducto:idProducto});
+  //-   })
+
+  script.
+    $(".icono_write").hide();
+    $(".icono_trash").hide();
+    $("#boton_probando").on("click",function(){
+      $(".icono_write").toggle();
+      $(".icono_trash").toggle();
+    });
+    
+    
+  script.
+    // METODO CORRECTO
+    $(".label_show").on("click", function(event) {
+      var attr_obj = $(this).attr("attr_obj");
+      attr_obj = JSON.parse( attr_obj );
+
+      var attr_nombre = attr_obj.nombre;
+      var attr_id = attr_obj.id;
+      var attr_precio = attr_obj.precio;
+      var attr_cantidad = attr_obj.cantidad;
+      var attr_descripcion = attr_obj.descripcion;
+      var attr_categoria = attr_obj.categorias.nombre;
+
+      $('#producto_id').text(attr_id);
+      $('#producto_nombre').text(attr_nombre);
+      $('#producto_precio').text(attr_precio);
+      $('#producto_cantidad').text(attr_cantidad);
+      $('#producto_descripcion').text(attr_descripcion);
+      $('#producto_categoria').text(attr_categoria)
+      $('.ui.modal.principal').modal('show');
+    });
+
+    $("#messageBox").hide();
+
+    // function show(id) {
+    //   console.log("->", id);
+    //   $('#producto_nombre ').text(id);
+    //   $('.ui.modal').modal('show');
+    // }
+
+  //script.
+  //  $('.ui.container .ui.teal.button')
+  //    .popup({
+  //      inline   : true,
+  //      hoverable: true,
+  //      position : 'bottom left',
+  //      delay: {
+  //        show: 0,
+  //        hide: 0
+  //      }
+  //    })
+  //  ;
+  //script.
+  //  $('.ss')
+  //    .popup({
+  //      inline   : true,
+  //      hoverable: true,
+  //      position : 'bottom left',
+  //      delay: {
+  //        show: 300,
+  //        hide: 800
+  //      }
+  //    })
+  //  ;
+  //  br
+  //  form(action='/producto/editar' method='post')
+  //    table(style='width:60%')
+  //      tr
+  //        th Id
+  //        th Nombre
+  //        th Precio
+  //        th Stock
+  //        th Descripcion
+  //        th Categoria
+  //      each producto in objResult_producto
+  //        tr
+  //          th
+  //            input(type='radio' name='idProducto' value=producto.id)
+  //            | #{producto.id}
+  //          th #{producto.nombre}
+  //          th #{producto.precio}
+  //          th #{producto.cantidad}
+  //          th #{producto.descripcion}
+  //          //-each categoria in objResult_categoria
+  //            if producto.categoriaId == categoria.id
+  //              th #{categoria.nombre}
+  //          th #{producto.categorias.nombre}
+  //    input(type='submit' value='Editar')
+  //  br
+  //  a.btn-crear(href='/producto/crear')
+  //    button.btn-crear(type='button') Crear

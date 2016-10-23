@@ -1,0 +1,118 @@
+doctype html
+html
+  head
+    title Crear Estacion
+    meta(charset='UTF-8')
+    meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+    script(src="../js/semantic.min.js")
+    link(rel='stylesheet' type='text/css' href='../css/semantic.min.css')
+  body
+    .ui.large.top.menu
+      .ui.container
+        a.item(href="/estaciones?access_token="+accessToken) Estaciones
+        a.item(href="/productos?access_token="+accessToken) Productos
+      .rigth.menu
+        .item
+          .ui.icon.input
+            input(type='text' placeholder='search...')
+            i.search.icon
+        .item
+          a.ui.black.button(href="/logout?access_token="+accessToken) Log Out
+
+    //Formulario
+
+    .ui.container
+      //.ui.form
+      if message != undefined
+        p #{message}
+      form.ui.form(action='/crearEstacion' method='post')
+
+        .field
+          .fields
+            .six.wide.field
+              input(type='hidden' name='userId' value=userId)
+
+        .field
+          label Nombre
+          .fields
+            .six.wide.field
+              input(type='text' name='nombre' placeholder='Nombre')
+
+
+        .field
+          label Latitud
+          .fields
+            .six.wide.field
+              input(type='text' name='latitud' placeholder='Latitud')
+
+        .field
+          label Longitud
+          .fields
+            .six.wide.field
+              input(type='text' name='longitud' placeholder='Longitud')
+
+        a.ui.black.button(href="/estaciones?access_token="+accessToken) Cancelar
+        input.ui.black.button(type='submit' value='Crear')
+
+  script.
+    $(".form")
+      .form({
+        inline:true,
+        on:'blur',
+        fields:{
+          nombre:{
+            identifier:'nombre',
+            rules:[{
+              type:'empty',
+              prompt:'Ingrese un nombre'
+            }]
+          },
+          latitud:{
+            identifier:'latitud',
+            rules:[{
+              type:'number',
+              prompt:'Ingrese un numero decimal(ejemplo: -40.50 )'
+            }]
+          },
+          longitud:{
+            identifier:'longitud',
+            rules:[{
+              type:'number',
+              prompt:'Ingrese un numero decimal(ejemplo: -40.50 )'
+            }]
+          }
+        }
+      });
+
+  
+  
+  
+//    a(href='/producto') Productos
+//    a(href='/categoria') Categorias
+//    if message != undefined
+//      p #{message}
+//    br
+//    form(action='/producto' method='post')
+//      label Nombre: 
+//      input(type='text' name='nombre')
+//      br
+//      label Categoria:
+//      - console.log( "->", objResult )
+//      select(name='categoriaId')
+//        each categoria in objResult_categoria
+//          option(value=categoria.id) #{categoria.nombre}
+//      br
+//      label Precio: 
+//      input(type='text' name='precio')
+//      br
+//      label Cantidad: 
+//      input(type='text' name='cantidad')
+//      br
+//      label Descripcion: 
+//      textarea(name='descripcion' rows='10' cols='30')
+//      br
+//      input(type='submit' value='Crear')
+//    a.btn-cancelar(href='/producto')
+//      button.btn-cancelar(type='button') Cancelar
