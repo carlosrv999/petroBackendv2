@@ -27,7 +27,7 @@ html
         h2.ui.teal.image.header
           img.image(src='../css/logo.png')
           .content Nuevo Usuario
-        form.ui.large.form(action="/crearUsuario/crear" method='post')
+        form.ui.large.form(action="/crearUsuario" method='post')
           .ui.stacked.segment
             .field
               .ui.left.icon.input
@@ -55,7 +55,7 @@ html
                 | #{mostrarTitulo}
               p
                 | #{mostrarMensaje}
-                a(href="#{link}") Log In
+                a(href="#{link}")   Log In
 
 
   script.

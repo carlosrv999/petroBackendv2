@@ -14,7 +14,7 @@ module.exports = function(app){
 		return res.render('crearuser');
 	})
 
-	router.post('/crearUsuario/crear', function(req,res){
+	router.post('/crearUsuario', function(req,res){
 		var correo = req.body.email;
 		var password = req.body.password;
 		//console.log(correo);
@@ -23,11 +23,23 @@ module.exports = function(app){
 			email : correo,
 			password : password
 		}, function(err,userInstance){
+			if(err){
+				console.log(err);
+				return res.render('crearuser',{
+                    modo: "noob",
+                    mostrarTitulo: "Error en registro",
+                    mostrarMensaje: "El email ya esta registrado",
+                });
+			}
 			return res.json(userInstance);
 		})
 	})
 
-	
+	router.get('/login', function(req,res){
+		return res.render('login');
+	})
+
+
 
 	app.use(router);
 

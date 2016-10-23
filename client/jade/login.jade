@@ -1,0 +1,97 @@
+doctype html
+html
+  head
+    title Log In
+    meta(charset="UTF-8")
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="../js/semantic.min.js")
+    link(rel="stylesheet" type="text/css" href="../css/semantic.min.css")
+    style.
+      body {
+        background-color: rgb(206, 203, 171);
+      }
+      body > .grid {
+        height: 100%;
+      }
+      .image {
+        margin-top: -100px;
+      }
+      .column {
+        max-width: 450px;
+      }
+  body
+    div.ui.middle.aligned.center.aligned.grid
+      div.column
+        h2.ui.teal.image.header
+          img.image(src='../css/logo.png')
+          div.content Ingrese a su cuenta:
+        form.ui.large.form(action="/login/auth" id="form_login"  method='post')
+          div.ui.stacked.segment
+            div.field
+              div.ui.left.icon.input
+                i.user.icon
+                input(type='text', name='form_email', placeholder='email')
+            div.field
+              div.ui.left.icon.input
+                i.lock.icon
+                input(type='password', name='form_password', placeholder='password')
+            input.ui.fluid.large.teal.submit.button(type='submit', value='Entrar')
+            .ui.error.message
+            .ui.container#message
+        div.ui.message Nuevo usuario? 
+          a(href='/crearUsuario') Crear 
+        
+
+        .ui.container#message
+          if mostrarMensaje && mostrarTitulo
+            .ui.message
+              i.close.icon
+              .header
+                | #{mostrarTitulo}
+              p
+                | #{mostrarMensaje}
+
+    
+
+  script.
+    $(".message .close").on("click",function(){
+      $(this)
+        .closest(".message")
+        .transition("fade");
+    });
+
+    if(!{modo}){
+      $(".ui.message").addClass("positive");
+    }else{
+      $(".ui.message").addClass("negative");
+    }
+
+  script.
+    $('.form')
+      .form({
+        on:'blur',
+        fields:{
+          usuario:{
+            identifier:'form_email',
+            rules:[
+              {
+                type:'empty',
+                prompt:'Ingrese un usuario'
+              },
+              {
+                type:'email',
+                prompt: 'Por favor ingrese un email valido'
+              }
+            ]
+          },
+          contraseña:{
+            identifier:'form_password',
+            rules:[{
+              type:'empty',
+              prompt:'Ingrese su contraseña'
+            }]
+          }
+        }
+      });
+
+      //$("#form_login").submit();
