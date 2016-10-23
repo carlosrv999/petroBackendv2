@@ -11,15 +11,15 @@ html
   body
     .ui.large.top.menu
       .ui.container
-        a.item(href="/estaciones?access_token="+accessToken) Estaciones
-        a.item(href="/productos?access_token="+accessToken) Productos
+        a.item(href="/estaciones") Estaciones
+        a.item(href="/productos") Productos
       .rigth.menu
         .item
           .ui.icon.input
             input(type='text' placeholder='search...')
             i.search.icon
         .item
-          a.ui.black.button(href="/logout?access_token="+accessToken) Log Out
+          a.ui.black.button(href="/logout") Log Out
 
     //Formulario
 
@@ -33,6 +33,7 @@ html
           .fields
             .six.wide.field
               input(type='hidden' name='userId' value=userId)
+
 
         .field
           label Nombre
@@ -53,7 +54,10 @@ html
             .six.wide.field
               input(type='text' name='longitud' placeholder='Longitud')
 
-        a.ui.black.button(href="/estaciones?access_token="+accessToken) Cancelar
+        .ui.container#message
+          if message != undefined
+            p #{message}
+        a.ui.black.button(href="/estaciones") Cancelar
         input.ui.black.button(type='submit' value='Crear')
 
   script.

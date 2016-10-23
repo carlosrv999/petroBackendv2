@@ -1,3 +1,4 @@
+var cookieParser = require('cookie-parser');
 module.exports = function(app){
 
 	var router = app.loopback.Router();
@@ -9,6 +10,7 @@ module.exports = function(app){
 
 
 	router.get('/', function(req,res){
+		console.log('cookies : ',req.cookies);
 		return res.render('homepage');
 	})
 
@@ -44,8 +46,6 @@ module.exports = function(app){
 	router.post('/login', function(req,res){
 		var correo = req.body.form_email;
 		var password = req.body.form_password;
-		//console.log(correo);
-		//console.log(password);
 		Usuario.login({
 			email : correo,
 			password : password
@@ -58,20 +58,21 @@ module.exports = function(app){
                     mostrarMensaje: "El usuario y/o password no son correctos",
 				})
 			}
-			console.log(token.id);
-			console.log(token.userId);
-			return res.render('principal', {
-				email: req.body.form_email,
-                accessToken: token.id
+			res.cookie('accessToken', token);
+			console.log(req.cookies.accessToken);
+			return res.render('principal',{
+				accessToken: token.id
 			});
 		});
 	})
 
 	router.get('/logout', function(req,res,next){
 		//console.log(req.accessToken.id);
-		if(!req.accessToken) return res.sendStatus(401);
-		Usuario.logout(req.accessToken.id, function(err){
+		if(!req.cookies.accessToken) return res.sendStatus(401);
+		Usuario.logout(req.cookies.accessToken.id, function(err){
 			if(err) return next(err);
+			console.log(req.cookies.accessToken);
+			res.clearCookie('accessToken');
 			console.log('salida exitosa');
 			res.redirect('/');
 		})
@@ -101,24 +102,25 @@ module.exports = function(app){
 	})*/
 
 	router.get('/estaciones', function(req,res){
-		console.log(req.accessToken);
-		console.log(req.accessToken.userId);
-		if(!req.accessToken) {
+
+		if(!req.cookies.accessToken) {
 			console.log('sin token');
 			return res.redirect('/');
 		}
+		console.log(req.cookies.accessToken.userId);
+		
 		Estacion.find({
 			where : {
-				userId : req.accessToken.userId
+				userId : req.cookies.accessToken.userId
 			}, include: ['usuario']
 		}, function(err, objResult_estacion) {
 			if(err) return res.sendStatus(404);
 			objResult_estacion = objResult_estacion.map(function(obj) {
                 return obj.toJSON();
             })
+            console.log(objResult_estacion);
 			res.render('estaciones', {
-				objResult_estacion : objResult_estacion,
-				accessToken : req.accessToken.id
+				objResult_estacion : objResult_estacion
 			})
 		})
 	})
@@ -145,20 +147,23 @@ module.exports = function(app){
 	})*/
 
 	router.get('/crearEstacion', function(req,res){
-		console.log(req.accessToken);
-		console.log(req.accessToken.userId);
-		if(!req.accessToken){
+		
+		if(!req.cookies.accessToken){
 			console.log('sin token');
 			return res.redirect('/');
 		}
-		return res.render('crearestacion',{
-			userId: req.accessToken.userId,
-			accessToken: req.accessToken.id
-		})
+		
+		res.render('crearestacion');
 	})
 
 	router.post('/crearEstacion', function(req,res){
-		var idUsuario = req.body.userId;
+		
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+
+		var idUsuario = req.cookies.accessToken.userId;
 		var nombre = req.body.nombre;
 		var latitud = req.body.latitud;
 		var longitud = req.body.longitud;
@@ -172,10 +177,51 @@ module.exports = function(app){
 		}, function(err, obj){
 			if(err) return console.log('error en : ', err);
 			console.log(obj);
-			return res.json(obj);
+			Estacion.find({
+				where : {
+				userId : req.cookies.accessToken.userId
+			}, include: ['usuario']
+				}, function(err, objResult_estacion) {
+					if(err) return res.sendStatus(404);
+					objResult_estacion = objResult_estacion.map(function(obj) {
+	            	    return obj.toJSON();
+	            	})
+	            //console.log(objResult_estacion);
+				res.render('estaciones', {
+					objResult_estacion : objResult_estacion, 
+					message : 'Estacion creada exitosamente.'
+				})
+			})
 		});
 	})
 
+	router.post('/eliminarEstacion', function(req,res){
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		var idEstacion = req.body.idEstacion;
+		console.log(idEstacion);
+		Estacion.destroyById(idEstacion, function(err){
+			if(err) return res.sendStatus(404);
+			Estacion.find({
+				where : {
+				userId : req.cookies.accessToken.userId
+			}, include: ['usuario']
+			}, function(err, objResult_estacion) {
+				if(err) return res.sendStatus(404);
+				objResult_estacion = objResult_estacion.map(function(obj) {
+            	    return obj.toJSON();
+            	})
+            //console.log(objResult_estacion);
+			res.render('estaciones', {
+				objResult_estacion : objResult_estacion, 
+				message : 'Estacion eliminada exitosamente.'
+			})
+		})
+
+		});
+	})
 	//router.get('/productos', function(req,res){
 	//	console.log(req.accessToken);
 	//})

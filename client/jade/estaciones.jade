@@ -22,15 +22,15 @@ html
     -var i=1
     .ui.large.top.menu
       .ui.container        
-        a.active.selection.item(href="/estaciones?access_token="+accessToken) Estaciones
-        a.item(href="/productos?access_token="+accessToken) Productos
+        a.active.selection.item(href="/estaciones") Estaciones
+        a.item(href="/productos") Productos
       .rigth.menu
         .item
           .ui.icon.input
             input(type='text' placeholder='search..')
             i.search.icon
         .item
-          a.ui.black.button(href="/logout?access_token="+accessToken) Log Out
+          a.ui.black.button(href="/logout") Log Out
     .ui.container
       if mostrarMensaje && mostrarTitulo
         .ui.message
@@ -85,11 +85,12 @@ html
 
                 th.ui.center.aligned #{estacion.geoPoint.lat}
                 th.ui.center.aligned #{estacion.geoPoint.lng}
-        
+      .ui.container#message
+          if message != undefined
+            p #{message}
+
       a.ui.black.button#boton_probando Editar
-      a.ui.black.button(href="/crearEstacion?access_token="+accessToken) Crear
-      
-      
+      a.ui.black.button(href="/crearEstacion") Crear
       
 
       // template
@@ -122,8 +123,9 @@ html
           .ui.negative.button No
           .ui.positive.right.labeled.icon.button Yes
             i.checkmark.icon
-        form#form_producto_delete(action="/producto/eliminar" method="post")
-          input#input_categoria_delete(name="id" type="hidden")
+        form#form_estacion_delete(action="/eliminarEstacion" method="post")
+          input#input_estacion_delete(name="idEstacion" type="hidden")
+
 
   script.
     $(".message .close")
@@ -133,11 +135,7 @@ html
           .transition("fade");
       });
 
-    if(!{modo}){
-      $(".ui.message").addClass("positive");
-    }else{
-      $(".ui.message").addClass("negative");
-    }
+
 
   script.
 
@@ -178,14 +176,15 @@ html
     //- });
 
     $(".icono_trash").on('click',function(){
-      var idProductoDelete = $(this).attr("attr_id");
+      var idEstacionDelete = $(this).attr("attr_id");
+      console.log(idEstacionDelete);
       $('.ui.small.modal')
       .modal({
         closable:false,
         onApprove: function() {
 
-          $("#input_categoria_delete").attr("value",idProductoDelete);
-          $("#form_producto_delete").submit();
+          $("#input_estacion_delete").attr("value",idEstacionDelete);
+          $("#form_estacion_delete").submit();
           //- if(!!idProductoDelete) {
           //-   $.get("/producto/eliminar?id="+idProductoDelete, function(payload) {
               //- var message = "", title = "";

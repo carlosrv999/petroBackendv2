@@ -7,6 +7,7 @@ var app = module.exports = loopback();
 
 var path = require('path');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 app.set("json spaces",2);
 app.set('views', path.resolve(__dirname,'../client/jade'));
@@ -20,7 +21,7 @@ app.use(loopback.token());
 
 app.use(loopback.static(path.resolve(__dirname, '../client')));
 
-
+app.use(cookieParser());
 
 app.start = function() {
   // start the web server
