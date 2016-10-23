@@ -1,0 +1,31 @@
+{
+  "name": "Estacion",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "nombre": {
+      "type": "string"
+    },
+    "geoPoint": {
+      "type": "geopoint"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "usuario": {
+      "type": "belongsTo",
+      "model": "Usuario",
+      "foreignKey": "idUsuario"
+    },
+    "productos": {
+      "type": "hasMany",
+      "model": "Producto",
+      "foreignKey": "idEstacion"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

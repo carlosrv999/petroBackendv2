@@ -1,0 +1,27 @@
+{
+  "name": "Producto",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "nombre": {
+      "type": "string"
+    },
+    "precio": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "estacion": {
+      "type": "belongsTo",
+      "model": "Estacion",
+      "foreignKey": "idEstacion"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

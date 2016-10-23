@@ -1,0 +1,12 @@
+{
+  "easyPetro": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "easyPetroDb",
+    "password": "",
+    "name": "easyPetro",
+    "user": "",
+    "connector": "mongodb"
+  }
+}

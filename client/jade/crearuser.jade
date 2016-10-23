@@ -1,0 +1,102 @@
+doctype html
+html
+  head
+    title Test
+    meta(charset='UTF-8')
+    meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+    link(rel="stylesheet" type="text/css" href="../css/semantic.min.css")
+    style.
+      body {
+        background-color: rgb(206, 203, 171);
+      }
+      body > .grid {
+        height: 100%;
+      }
+      .image {
+        margin-top: -100px;
+      }
+      .column {
+        max-width: 450px;
+      }
+    script(src="../js/semantic.min.js")
+  body
+    .ui.middle.aligned.center.aligned.grid
+      .column
+        h2.ui.teal.image.header
+          img.image(src='../css/logo.png')
+          .content Nuevo Usuario
+        form.ui.large.form(action="/crearUsuario/crear" method='post')
+          .ui.stacked.segment
+            .field
+              .ui.left.icon.input
+                i.bullseye.icon
+                input(type='text', name='email', placeholder='email')
+            
+            .field
+              .ui.left.icon.input
+                i.bullseye.icon
+                input(type='password', name='password', placeholder='contraseña')
+            .field
+              .ui.left.icon.input
+                i.bullseye.icon
+                input(type='password', name='password1', placeholder='Confirme su contraseña')
+
+            .ui.error.message
+            input.ui.fluid.large.teal.submit.button(type='submit', value='Crear')
+            br
+            a.ui.fluid.large.teal.submit.button(href='/login') Cancelar
+        .ui.container#message
+          if mostrarMensaje && mostrarTitulo
+            .ui.message
+              i.close.icon
+              .header
+                | #{mostrarTitulo}
+              p
+                | #{mostrarMensaje}
+                a(href="#{link}") Log In
+
+
+  script.
+    $(".message .close").on("click",function(){
+      $(this)
+        .closest(".message")
+        .transition("fade");
+    });
+
+    if(!{modo}){
+      $(".ui.message").addClass("positive");
+    }else{
+      $(".ui.message").addClass("negative");
+    }
+
+  
+  script.
+    $(".form")
+      .form({
+        on:'blur',
+        fields:{
+          email:{
+            identifier:'email',
+            rules:[{
+              type:'email',
+              prompt:'Porfavor ingrese un email valido'
+            }]
+          },
+          password:{
+            identifier:'password',
+            rules:[{
+              type:'empty',
+              prompt:'Ingrese una contraseña'
+            }]
+          },
+          password1:{
+            identifier:'password1',
+            rules:[{
+              type:'match[password]',
+              prompt:'Las contraseñas no concuerdan'
+            }]
+          }
+        }
+      });

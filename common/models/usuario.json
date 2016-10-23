@@ -1,0 +1,28 @@
+{
+  "name": "Usuario",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "estacions": {
+      "type": "hasMany",
+      "model": "Estacion",
+      "foreignKey": "idUsuario"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

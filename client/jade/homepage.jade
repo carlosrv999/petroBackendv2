@@ -1,0 +1,48 @@
+doctype HTML
+html
+  head
+    title HomePage
+    meta(charset="UTF-8")
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="../js/semantic.min.js")
+    link(rel="stylesheet" type="text/css" href="../css/semantic.min.css")
+    style.
+      .masthead.segment {
+        min-height: 676px;
+        padding: 0em 0em;
+        margin-botton = 0em;
+      }
+      .masthead h1.ui.header{
+        margin-top: 1.3em;
+        margin-bottom: 0em;
+        font-size: 4em;
+        font-weight: normal;
+      }
+      .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+      }
+  body
+
+    .pusher
+      .ui.inverted.vertical.masthead.center.aligned.segment
+        .ui.container
+          .ui.large.secondary.inverted.pointing.menu
+            a.toc.item
+              i.sidebar.icon
+            a.active.item Home
+            a.item Clientes
+            a.item Estaciones
+            a.item Contactenos
+            .right.menu
+              .item
+                a.ui.inverted.button(href="/login") Log In
+              .item
+                a.ui.inverted.button(href="/crearUsuario") Sign Up
+        .ui.text.container
+          h1.ui.inverted.header
+            | EasyPetro Control de Usuarios y estaciones
+          h2
+            | Configuracion de estaciones y productos
+          .ui.huge.primary.button Contactenos
+            i.right.arrow.icon
