@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title Menu Estaciones
+    title Menu Productos
     meta(charset='UTF-8')
     meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
     meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")  
@@ -22,8 +22,8 @@ html
     -var i=1
     .ui.large.top.menu
       .ui.container        
-        a.active.selection.item(href="/estaciones") Estaciones
-        a.item.itemProd Productos
+        a.item(href="/estaciones") Estaciones
+        a.active.selection.item Productos
       .rigth.menu
         .item
           .ui.icon.input
@@ -47,30 +47,29 @@ html
           tr
             th.ui.center.aligned Id
             th.ui.center.aligned Nombre
-            th.ui.center.aligned Latitud
-            th.ui.center.aligned Longitud
+            th.ui.center.aligned Precio
             //th.ui.center.aligned Precio
             //th.ui.center.aligned Stock
           //  th.ui.center.aligned Descripcion
           //  th.ui.center.aligned Categoria
         tbody
-          each estacion in objResult_estacion
+          each producto in objResult_producto
 
-            tr.ui.form.item_tr(attr_id=estacion.id)
+            tr.ui.form.item_tr
               .inline.fields
                 th.ui.center.aligned 
                   .two.fields
                     .field
                       a
-                        i.write.icon.icono_write(attr_id=estacion.id)
+                        i.write.icon.icono_write(attr_id=producto.id)
 
-                      i.trash.icon.icono_trash(attr_id=estacion.id)
+                      i.trash.icon.icono_trash(attr_id=producto.id)
 
                     .six.wide.fields.left.floated
                       .fields
                         .one.wide.field
-                          //input(type='radio' name='idEstacion' value=estacion.id)
-                          label #{estacion.id}
+                          //input(type='radio' name='idProducto' value=producto.id)
+                          label #{producto.id}
 
 
 
@@ -78,19 +77,18 @@ html
                 th.ui.center.aligned
                   // MODO FUNCION
                   // -label(onClick="show('" + producto.nombre + "')" ) #{producto.nombre}
-                  -console.log('---->***',estacion.usuario.nombre)
+                  
                   //- label.label_show(attr_nombre=producto.nombre, attr_id=producto.id, #{producto.nombre}
-                  label.label_show(attr_obj=JSON.stringify(estacion)) #{estacion.nombre}
+                  label.label_show(attr_obj=JSON.stringify(producto)) #{producto.nombre}
                   -i=i+1
 
-                th.ui.center.aligned #{estacion.geoPoint.lat}
-                th.ui.center.aligned #{estacion.geoPoint.lng}
+                th.ui.center.aligned #{producto.precio}
       .ui.container#message
           if message != undefined
             p #{message}
 
       a.ui.black.button#boton_probando Editar
-      a.ui.black.button(href="/crearEstacion") Crear
+      a.ui.black.button(href="/crearProducto") Crear
       
 
       // template
@@ -123,10 +121,8 @@ html
           .ui.negative.button No
           .ui.positive.right.labeled.icon.button Yes
             i.checkmark.icon
-        form#form_estacion_delete(action="/eliminarEstacion" method="post")
-          input#input_estacion_delete(name="idEstacion" type="hidden")
-        form#form_estacion_productos(action="/productos" method="post")
-          input#input_estacion_productos(name="idEstacion" type="hidden")
+        form#form_producto_delete(action="/eliminarProducto" method="post")
+          input#input_producto_delete(name="idProducto" type="hidden")
 
 
   script.
@@ -177,37 +173,18 @@ html
     //- $(".eliminar_icono").click(function() {
     //- });
 
-    $(".itemProd").on('click', function(){
-      $(".item_tr").css({
-        'background-color': 'pink',
-        'cursor' : 'pointer'
-      });
-      $(".item_tr").hover(function(){
-        $(this).css("background-color", "yellow");
-        }, function(){
-        $(this).css("background-color", "pink");
-      });
-
-      $(".item_tr").on('click', function(){
-        var idEstacionEdit = $(this).attr("attr_id");
-        $("#input_estacion_productos").attr("value",idEstacionEdit);
-        $("#form_estacion_productos").submit();
-      });
-
-    });
-
     $(".icono_trash").on('click',function(){
-      var idEstacionDelete = $(this).attr("attr_id");
-      console.log(idEstacionDelete);
+      var idProductoDel = $(this).attr("attr_id");
+      console.log(idProductoDel);
       $('.ui.small.modal')
       .modal({
         closable:false,
         onApprove: function() {
 
-          $("#input_estacion_delete").attr("value",idEstacionDelete);
-          $("#form_estacion_delete").submit();
-          //- if(!!idProductoDelete) {
-          //-   $.get("/producto/eliminar?id="+idProductoDelete, function(payload) {
+          $("#input_producto_delete").attr("value",idProductoDel);
+          $("#form_producto_delete").submit();
+          //- if(!!idProductoDel) {
+          //-   $.get("/producto/eliminar?id="+idProductoDel, function(payload) {
               //- var message = "", title = "";
 
               //- if(payload && payload.success) {
@@ -284,60 +261,3 @@ html
 
     $("#messageBox").hide();
 
-    // function show(id) {
-    //   console.log("->", id);
-    //   $('#producto_nombre ').text(id);
-    //   $('.ui.modal').modal('show');
-    // }
-
-  //script.
-  //  $('.ui.container .ui.teal.button')
-  //    .popup({
-  //      inline   : true,
-  //      hoverable: true,
-  //      position : 'bottom left',
-  //      delay: {
-  //        show: 0,
-  //        hide: 0
-  //      }
-  //    })
-  //  ;
-  //script.
-  //  $('.ss')
-  //    .popup({
-  //      inline   : true,
-  //      hoverable: true,
-  //      position : 'bottom left',
-  //      delay: {
-  //        show: 300,
-  //        hide: 800
-  //      }
-  //    })
-  //  ;
-  //  br
-  //  form(action='/producto/editar' method='post')
-  //    table(style='width:60%')
-  //      tr
-  //        th Id
-  //        th Nombre
-  //        th Precio
-  //        th Stock
-  //        th Descripcion
-  //        th Categoria
-  //      each producto in objResult_producto
-  //        tr
-  //          th
-  //            input(type='radio' name='idProducto' value=producto.id)
-  //            | #{producto.id}
-  //          th #{producto.nombre}
-  //          th #{producto.precio}
-  //          th #{producto.cantidad}
-  //          th #{producto.descripcion}
-  //          //-each categoria in objResult_categoria
-  //            if producto.categoriaId == categoria.id
-  //              th #{categoria.nombre}
-  //          th #{producto.categorias.nombre}
-  //    input(type='submit' value='Editar')
-  //  br
-  //  a.btn-crear(href='/producto/crear')
-  //    button.btn-crear(type='button') Crear

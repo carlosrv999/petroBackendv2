@@ -10,8 +10,10 @@
       "type": "string"
     },
     "precio": {
-      "type": "number",
-      "required": true
+      "type": "number"
+    },
+    "idEstacion" : {
+      "type" : "string"
     }
   },
   "validations": [],

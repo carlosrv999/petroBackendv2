@@ -129,6 +129,30 @@ module.exports = function(app){
 		})
 	})
 
+	router.post('/productos', function(req,res){
+		
+		if(!req.cookies.accessToken) {
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		console.log("hola ",req.body.idEstacion);
+		res.cookie('idEstacion', req.body.idEstacion);
+
+		Producto.find({
+			where : {
+				idEstacion : req.body.idEstacion
+			}, include: ['estacion']
+		}, function(err, objResult_producto) {
+			if(err) return res.sendStatus(404);
+			objResult_producto = objResult_producto.map(function(obj) {
+                return obj.toJSON();
+            })
+            console.log(objResult_producto);
+			res.render('productos', {
+				objResult_producto : objResult_producto
+			})
+		})
+	})
 	/*router.get('/estaciones', function(req,res){
 		console.log(req.accessToken);
 		console.log(req.accessToken.userId);
@@ -158,6 +182,16 @@ module.exports = function(app){
 		}
 		
 		res.render('crearestacion');
+	})
+
+	router.get('/crearProducto', function(req,res){
+		
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		
+		res.render('crearproducto');
 	})
 
 	router.post('/crearEstacion', function(req,res){
@@ -204,6 +238,63 @@ module.exports = function(app){
 		});
 	})
 
+
+	router.post('/crearProducto', function(req,res){
+		
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		var idEstacion = req.cookies.idEstacion;
+		var nombre = req.body.nombre;
+		var precio = req.body.precio;
+		Producto.create({
+			nombre : nombre,
+			precio : precio,
+			idEstacion : idEstacion
+		}, function(err, obj){
+			if(err) {
+				console.log('error en : ', err);
+				return res.render('crearproducto', {
+					message : 'error en crear'
+				})
+			}
+			console.log(obj);
+			Producto.find({
+				where : {
+					idEstacion : idEstacion
+				}, include: ['estacion']
+			}, function(err, objResult_producto) {
+				if(err) return res.sendStatus(404);
+				objResult_producto = objResult_producto.map(function(obj) {
+                return obj.toJSON();
+            })
+            console.log(objResult_producto);
+			res.render('productos', {
+				objResult_producto : objResult_producto
+			})
+		})
+		});
+	})
+
+	router.get('/mierda', function(req,res){
+		Producto.find({
+				where : {
+					idEstacion : req.cookies.idEstacion
+				}, include: ['estacion']
+			}, function(err, objResult_producto) {
+				if(err) return res.sendStatus(404);
+				objResult_producto = objResult_producto.map(function(obj) {
+                return obj.toJSON();
+            })
+            console.log(objResult_producto);
+			return res.json(objResult_producto);
+		})
+	})
+	/*router.get('/estacion/editar', function(req,res){
+		console.log(req.query.id);
+	})*/
+
 	router.post('/eliminarEstacion', function(req,res){
 		if(!req.cookies.accessToken){
 			console.log('sin token');
@@ -231,6 +322,37 @@ module.exports = function(app){
 
 		});
 	})
+	router.post('/eliminarProducto', function(req,res){
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		var idEst = req.cookies.idEstacion;
+		var idProducto = req.body.idProducto;
+		console.log(idProducto);
+		Producto.destroyById(idProducto, function(err){
+			if(err) return res.sendStatus(404);
+			Producto.find({
+				where : {
+					idEstacion : idEst
+				}, include: ['estacion']
+			}, function(err, objResult_producto) {
+				if(err) return res.sendStatus(404);
+				objResult_producto = objResult_producto.map(function(obj) {
+            	    return obj.toJSON();
+            	})
+            	console.log(objResult_producto);
+				res.render('productos', {
+					objResult_producto : objResult_producto
+				})
+			})
+
+		});
+	})
+
+	
+
+
 	//router.get('/productos', function(req,res){
 	//	console.log(req.accessToken);
 	//})

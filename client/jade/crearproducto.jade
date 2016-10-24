@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title Crear Estacion
+    title Crear Producto
     meta(charset='UTF-8')
     meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
     meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")
@@ -27,7 +27,7 @@ html
       //.ui.form
       if message != undefined
         p #{message}
-      form.ui.form(action='/crearEstacion' method='post')
+      form.ui.form(action='/crearProducto' method='post')
 
         .field
           .fields
@@ -43,21 +43,16 @@ html
 
 
         .field
-          label Latitud
+          label Precio
           .fields
             .six.wide.field
-              input(type='text' name='latitud' placeholder='Latitud')
+              input(type='text' name='precio' placeholder='Precio')
 
-        .field
-          label Longitud
-          .fields
-            .six.wide.field
-              input(type='text' name='longitud' placeholder='Longitud')
 
         .ui.container#message
           if message != undefined
             p #{message}
-        a.ui.black.button(href="/estaciones") Cancelar
+        a.ui.black.button(href="/productos") Cancelar
         input.ui.black.button(type='submit' value='Crear')
 
   script.
@@ -74,17 +69,10 @@ html
             }]
           },
           latitud:{
-            identifier:'latitud',
+            identifier:'precio',
             rules:[{
               type:'number',
-              prompt:'Ingrese una latitud valida (-90.000000 a +90.000000) (ejemplo: -55.254769 )'
-            }]
-          },
-          longitud:{
-            identifier:'longitud',
-            rules:[{
-              type:'number',
-              prompt:'Ingrese una longitud valida (-180.000000 a +180.000000)(ejemplo: -168.554178 )'
+              prompt:'Ingrese un numero decimal(ejemplo: -40.50 )'
             }]
           }
         }
