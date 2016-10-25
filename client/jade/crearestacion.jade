@@ -8,6 +8,16 @@ html
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     script(src="../js/semantic.min.js")
     link(rel='stylesheet' type='text/css' href='../css/semantic.min.css')
+    style.
+      html,body{
+        height : 100%;
+        margin : 0 ;
+      }
+      #map{
+        height : 50%;
+        border : 1px solid green;
+        z-index : 1;
+      }
   body
     .ui.large.top.menu
       .ui.container
@@ -24,6 +34,7 @@ html
     //Formulario
 
     .ui.container
+      
       //.ui.form
       if message != undefined
         p #{message}
@@ -41,19 +52,19 @@ html
             .six.wide.field
               input(type='text' name='nombre' placeholder='Nombre')
         
-        #map
+        
 
         .field
           label Latitud
           .fields
             .six.wide.field
-              input(type='text' name='latitud' placeholder='Latitud')
+              input(type='text' name='latitud' placeholder='Latitud' readonly)
 
         .field
           label Longitud
           .fields
             .six.wide.field
-              input(type='text' name='longitud' placeholder='Longitud')
+              input(type='text' name='longitud' placeholder='Longitud' readonly)
 
         .ui.container#message
           if message != undefined
@@ -90,16 +101,29 @@ html
           }
         }
       });
-    
-  script(type='text/javascript').
-    var map;
-    function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8
-      });
+  #map
+  script.
+    var mapGoogle = document.getElementById('map');
+    var centro = {
+      lat : -12.046775,
+      lng : -77.042820
     };
-  script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCAX91_ercE3wCCrvRdXlvIeEYxTPg897I&callback=initMap', async='', defer='').
+    var map;
+    function initMap(){
+      map = new google.maps.Map(mapGoogle,{
+      center: centro,
+      zoom: 12,
+      mapTypeControl : false,
+        streetViewControl : false,
+        zoomControlOptions : {
+          position : google.maps.ControlPosition.RIGHT_TOP
+        }
+      });
+      
+        
+    }
+    
+  script(async='', defer='', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCAX91_ercE3wCCrvRdXlvIeEYxTPg897I&signed_in=true&libraries=places&callback=initMap')
   
   
   

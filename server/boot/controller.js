@@ -158,6 +158,19 @@ module.exports = function(app){
 		})
 	})
 	
+	router.get('/productosjson', function(req,res){
+		var idEstacion = req.query.idEstacion;
+		Producto.find({
+			where : {
+				idEstacion : idEstacion
+			}, include: ['estacion']
+		}, function(err, objResult_producto) {
+			if(err) return res.sendStatus(404);
+			return res.json(objResult_producto);
+		})
+		
+	})
+	
 	router.post('/productos', function(req,res){
 		
 		if(!req.cookies.accessToken) {
