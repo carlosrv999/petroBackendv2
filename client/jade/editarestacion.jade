@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title Crear Estacion
+    title Editar Estacion
     meta(charset='UTF-8')
     meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
     meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")
@@ -27,7 +27,7 @@ html
       //.ui.form
       if message != undefined
         p #{message}
-      form.ui.form(action='/crearEstacion' method='post')
+      form.ui.form(action='/editarEstacion' method='post')
 
         .field
           .fields
@@ -40,8 +40,7 @@ html
           .fields
             .six.wide.field
               input(type='text' name='nombre' placeholder='Nombre')
-        
-        #map
+
 
         .field
           label Latitud
@@ -90,16 +89,7 @@ html
           }
         }
       });
-    
-  script(type='text/javascript').
-    var map;
-    function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8
-      });
-    };
-  script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCAX91_ercE3wCCrvRdXlvIeEYxTPg897I&callback=initMap', async='', defer='').
+
   
   
   

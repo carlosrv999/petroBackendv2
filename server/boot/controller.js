@@ -128,7 +128,36 @@ module.exports = function(app){
 			})
 		})
 	})
-
+	
+	router.get('/productos', function(req,res){
+		if(!req.cookies.accessToken && !req.cookies.idEstacion) {
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		Producto.find({
+			where : {
+				idEstacion : req.cookies.idEstacion
+			}, include: ['estacion']
+		}, function(err, objResult_producto) {
+			if(err) return res.sendStatus(404);
+			objResult_producto = objResult_producto.map(function(obj) {
+                return obj.toJSON();
+            })
+            console.log(objResult_producto);
+			res.render('productos', {
+				objResult_producto : objResult_producto
+			})
+		})
+		
+	})
+	
+	router.get('/obtenerTodaEstacion', function(req,res){
+		Estacion.find({}, function(err, instances){
+			if(err) return console.log("error: ", err);
+			return res.json(instances);
+		})
+	})
+	
 	router.post('/productos', function(req,res){
 		
 		if(!req.cookies.accessToken) {
@@ -238,6 +267,7 @@ module.exports = function(app){
 		});
 	})
 
+	
 
 	router.post('/crearProducto', function(req,res){
 		
@@ -304,6 +334,15 @@ module.exports = function(app){
 		console.log(idEstacion);
 		Estacion.destroyById(idEstacion, function(err){
 			if(err) return res.sendStatus(404);
+			
+			Producto.destroyAll({ idEstacion : idEstacion }, function(err2,info){
+				if(err){
+					console.log("error en eliminar productos de estacion borrada: ",err2);
+					return res.sendStatus(404);
+				}
+				console.log("eliminacion de productos exitosa: ",info);
+			})
+			
 			Estacion.find({
 				where : {
 				userId : req.cookies.accessToken.userId
