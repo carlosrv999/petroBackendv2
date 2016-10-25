@@ -119,8 +119,19 @@ html
           position : google.maps.ControlPosition.RIGHT_TOP
         }
       });
-      
-        
+      map.addListener('click', function(event){
+        var Latitud = event.latLng.lat();
+        var Longitud = event.latLng.lng();
+        console.log(Latitud+"  "+Longitud);
+        function placeMarker(location) {
+          var clickedLocation = new google.maps.LatLng(location);
+          var marker = new google.maps.Marker({
+            position: location, 
+            map: map
+          });
+          map.setCenter(location);
+        }
+      })
     }
     
   script(async='', defer='', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCAX91_ercE3wCCrvRdXlvIeEYxTPg897I&signed_in=true&libraries=places&callback=initMap')
