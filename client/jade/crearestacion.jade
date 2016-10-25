@@ -58,13 +58,13 @@ html
           label Latitud
           .fields
             .six.wide.field
-              input(type='text' name='latitud' placeholder='Latitud' readonly)
+              input#input_latitud(type='text' name='latitud' placeholder='Latitud' readonly)
 
         .field
           label Longitud
           .fields
             .six.wide.field
-              input(type='text' name='longitud' placeholder='Longitud' readonly)
+              input#input_longitud(type='text' name='longitud' placeholder='Longitud' readonly)
 
         .ui.container#message
           if message != undefined
@@ -123,15 +123,20 @@ html
         var Latitud = event.latLng.lat();
         var Longitud = event.latLng.lng();
         console.log(Latitud+"  "+Longitud);
-        function placeMarker(location) {
-          var clickedLocation = new google.maps.LatLng(location);
-          var marker = new google.maps.Marker({
-            position: location, 
-            map: map
-          });
-          map.setCenter(location);
-        }
+        $("#input_latitud").attr("value",Latitud);
+        $("#input_longitud").attr("value",Longitud);
+        var myLatLng = {lat: Latitud, lng: Longitud};
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Hello World!'
+        });
+        map.setCenter({lat: Latitud, lng: Longitud});
+        
+        
       })
+      
+      
     }
     
   script(async='', defer='', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCAX91_ercE3wCCrvRdXlvIeEYxTPg897I&signed_in=true&libraries=places&callback=initMap')
