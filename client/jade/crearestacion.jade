@@ -69,8 +69,10 @@ html
         .ui.container#message
           if message != undefined
             p #{message}
+        
         a.ui.black.button(href="/estaciones") Cancelar
-        input.ui.black.button(type='submit' value='Crear')
+        input#input_submit.ui.black.button(type='submit' value='Crear' disabled)
+        label#label_mapa Seleccione la ubicacion de la estacion
 
   script.
     $(".form")
@@ -101,14 +103,19 @@ html
           }
         }
       });
+  
   #map
   script.
+    
     var mapGoogle = document.getElementById('map');
     var centro = {
       lat : -12.046775,
       lng : -77.042820
     };
     var map;
+    var markers = [];
+    var latitud;
+    var longitud;
     function initMap(){
       map = new google.maps.Map(mapGoogle,{
       center: centro,
@@ -119,25 +126,40 @@ html
           position : google.maps.ControlPosition.RIGHT_TOP
         }
       });
-      map.addListener('click', function(event){
-        var Latitud = event.latLng.lat();
-        var Longitud = event.latLng.lng();
-        console.log(Latitud+"  "+Longitud);
-        $("#input_latitud").attr("value",Latitud);
-        $("#input_longitud").attr("value",Longitud);
-        var myLatLng = {lat: Latitud, lng: Longitud};
-        var marker = new google.maps.Marker({
-          position: myLatLng,
-          map: map,
-          title: 'Hello World!'
-        });
-        map.setCenter({lat: Latitud, lng: Longitud});
-        
-        
-      })
       
+      map.addListener('click', function(event) {
+        $("#label_mapa").text("");
+        $("#input_submit").prop('disabled',false);
+        latitud = event.latLng.lat();
+        longitud = event.latLng.lng();
+        $("#input_latitud").attr("value",latitud);
+        $("#input_longitud").attr("value",longitud);
+        deleteMarkers();
+        addMarker(event.latLng);
+      });
       
     }
+    function addMarker(location) {
+      var marker = new google.maps.Marker({
+        position: location,
+        map: map
+      });
+      markers.push(marker);
+    }
+    function setMapOnAll(map) {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
+    }
+    function clearMarkers() {
+      setMapOnAll(null);
+    }
+    function deleteMarkers() {
+      clearMarkers();
+      markers = [];
+    }
+    
+    
     
   script(async='', defer='', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCAX91_ercE3wCCrvRdXlvIeEYxTPg897I&signed_in=true&libraries=places&callback=initMap')
   
