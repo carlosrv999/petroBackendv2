@@ -320,23 +320,8 @@ module.exports = function(app){
 		});
 	})
 
-	router.get('/mierda', function(req,res){
-		Producto.find({
-				where : {
-					idEstacion : req.cookies.idEstacion
-				}, include: ['estacion']
-			}, function(err, objResult_producto) {
-				if(err) return res.sendStatus(404);
-				objResult_producto = objResult_producto.map(function(obj) {
-                return obj.toJSON();
-            })
-            console.log(objResult_producto);
-			return res.json(objResult_producto);
-		})
-	})
-	/*router.get('/estacion/editar', function(req,res){
-		console.log(req.query.id);
-	})*/
+	
+
 
 	router.post('/eliminarEstacion', function(req,res){
 		if(!req.cookies.accessToken){
@@ -426,6 +411,26 @@ module.exports = function(app){
 		
 	})
 
+	router.post('/editarProducto', function(req,res){
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		res.cookie('idProductoEditar', req.body.idProducto);
+		var nombre;
+		var precio;
+		Producto.findById(req.body.idProducto, function(err, instance){
+			if(err) return res.sendStatus(404);
+			console.log(instance);
+			nombre = instance.nombre;
+			precio = instance.precio;
+			return res.render('editarproducto',{
+				messageNombre : nombre,
+				messagePrecio : precio
+			});
+		})
+	})
+
 	router.post('/editarEstacion/confirm', function(req,res){
 		if(!req.cookies.accessToken){
 			console.log('sin token');
@@ -461,13 +466,7 @@ module.exports = function(app){
 		});
 	})
 
-	router.post('/editarProducto', function(req,res){
-		if(!req.cookies.accessToken){
-			console.log('sin token');
-			return res.redirect('/');
-		}
-		return res.render('editarproducto');
-	})
+	
 
 
 	//router.get('/productos', function(req,res){

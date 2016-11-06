@@ -17,7 +17,10 @@ html
         color: #4183C4;
         cursor: pointer;
       }
-    
+    style.
+      i.write.icon.icono_write {
+        cursor: pointer;
+      }
   body
     -var i=1
     .ui.large.top.menu
@@ -123,7 +126,8 @@ html
             i.checkmark.icon
         form#form_producto_delete(action="/eliminarProducto" method="post")
           input#input_producto_delete(name="idProducto" type="hidden")
-
+        form#form_producto_editar(action="/editarProducto" method="post")
+          input#input_producto_editar(name="idProducto" type="hidden")
 
   script.
     $(".message .close")
@@ -172,6 +176,16 @@ html
 
     //- $(".eliminar_icono").click(function() {
     //- });
+
+
+    //editar producto
+    $(".icono_write").on('click',function(){
+      var idProductoEditar = $(this).attr("attr_id");
+      console.log(idProductoEditar);
+      $("#input_producto_editar").attr("value",idProductoEditar);
+      $("#form_producto_editar").submit();
+
+    });
 
     $(".icono_trash").on('click',function(){
       var idProductoDel = $(this).attr("attr_id");
