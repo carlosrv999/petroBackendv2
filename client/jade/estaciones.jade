@@ -17,7 +17,10 @@ html
         color: #4183C4;
         cursor: pointer;
       }
-    
+    style.
+      i.write.icon.icono_write {
+        cursor: pointer;
+      }
   body
     -var i=1
     .ui.large.top.menu
@@ -65,15 +68,7 @@ html
                         i.write.icon.icono_write(attr_id=estacion.id)
 
                       i.trash.icon.icono_trash(attr_id=estacion.id)
-
-                    .six.wide.fields.left.floated
-                      .fields
-                        .one.wide.field
-                          //input(type='radio' name='idEstacion' value=estacion.id)
-                          label #{estacion.id}
-
-
-
+                    label #{estacion.id}
 
                 th.ui.center.aligned
                   // MODO FUNCION
@@ -127,6 +122,8 @@ html
           input#input_estacion_delete(name="idEstacion" type="hidden")
         form#form_estacion_productos(action="/productos" method="post")
           input#input_estacion_productos(name="idEstacion" type="hidden")
+        form#form_estacion_editar(action="/editarEstacion" method="post")
+          input#input_estacion_editar(name="idEstacion" type="hidden")
 
 
   script.
@@ -193,6 +190,14 @@ html
         $("#input_estacion_productos").attr("value",idEstacionEdit);
         $("#form_estacion_productos").submit();
       });
+
+    });
+    //editar estacion
+    $(".icono_write").on('click',function(){
+      var idEstacionEditar = $(this).attr("attr_id");
+      console.log(idEstacionEditar);
+      $("#input_estacion_editar").attr("value",idEstacionEditar);
+      $("#form_estacion_editar").submit();
 
     });
 

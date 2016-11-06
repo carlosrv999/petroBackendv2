@@ -8,6 +8,16 @@ html
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     script(src="../js/semantic.min.js")
     link(rel='stylesheet' type='text/css' href='../css/semantic.min.css')
+    style.
+      html,body{
+        height : 100%;
+        margin : 0 ;
+      }
+      #map{
+        height : 50%;
+        border : 1px solid green;
+        z-index : 1;
+      }
   body
     .ui.large.top.menu
       .ui.container
@@ -24,10 +34,11 @@ html
     //Formulario
 
     .ui.container
+      
       //.ui.form
       if message != undefined
         p #{message}
-      form.ui.form(action='/editarEstacion' method='post')
+      form.ui.form#form_editar(action='/editarEstacion/confirm' method='post')
 
         .field
           .fields
@@ -39,27 +50,38 @@ html
           label Nombre
           .fields
             .six.wide.field
-              input(type='text' name='nombre' placeholder='Nombre')
-
+              input#input_nombre(type='text' name='nombre' placeholder='Nombre' value = "#{messageNombre}")
+        
+        
 
         .field
           label Latitud
           .fields
             .six.wide.field
-              input(type='text' name='latitud' placeholder='Latitud')
+              input#input_latitud(type='text' name='latitud' placeholder='Latitud' value = "#{messageLat}" readonly)
 
         .field
           label Longitud
           .fields
             .six.wide.field
-              input(type='text' name='longitud' placeholder='Longitud')
+              input#input_longitud(type='text' name='longitud' placeholder='Longitud' value = "#{messageLng}" readonly)
 
         .ui.container#message
           if message != undefined
             p #{message}
+        
         a.ui.black.button(href="/estaciones") Cancelar
-        input.ui.black.button(type='submit' value='Crear')
+        a#input_submit.ui.black.button Editar
+        label#label_mapa Seleccione la ubicacion de la estacion
 
+      .ui.small.modal
+        .header Editar Estacion
+        .content ¿Esta seguro de editar esta estacion?
+        .actions
+          .ui.negative.button No
+          .ui.positive.right.labeled.icon.button Yes
+            i.checkmark.icon
+  
   script.
     $(".form")
       .form({
@@ -89,7 +111,86 @@ html
           }
         }
       });
+  
+  script.
+    $("#input_submit").on('click',function(){
+      $('.ui.small.modal')
+      .modal({
+        closable : false,
+        onApprove : function(){
+          $("#form_editar").submit();
+        }
+      })
+      .modal('show');
+    });
+  #map
+  script.
+    
+    var mapGoogle = document.getElementById('map');
+    var centro = {
+      lat : -12.046775,
+      lng : -77.042820
+    };
+    var map;
+    var markers = [];
+    var latitud;
+    var longitud;
+    function initMap(){
+      map = new google.maps.Map(mapGoogle,{
+      center: centro,
+      zoom: 12,
+      mapTypeControl : false,
+        streetViewControl : false,
+        zoomControlOptions : {
+          position : google.maps.ControlPosition.RIGHT_TOP
+        }
+      });
+      
+      var marcadorInicial = new google.maps.Marker({
+        position: {
+          lat : #{messageLat},
+          lng : #{messageLng}
+        },
+        map : map,
+        title : 'Posicion Actual',
+        icon : 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+      });
 
+      map.addListener('click', function(event) {
+        $("#label_mapa").text("");
+        
+        latitud = event.latLng.lat();
+        longitud = event.latLng.lng();
+        $("#input_latitud").attr("value",latitud);
+        $("#input_longitud").attr("value",longitud);
+        deleteMarkers();
+        addMarker(event.latLng);
+      });
+      
+    }
+    function addMarker(location) {
+      var marker = new google.maps.Marker({
+        position: location,
+        map: map
+      });
+      markers.push(marker);
+    }
+    function setMapOnAll(map) {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
+    }
+    function clearMarkers() {
+      setMapOnAll(null);
+    }
+    function deleteMarkers() {
+      clearMarkers();
+      markers = [];
+    }
+    
+    
+    
+  script(async='', defer='', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCAX91_ercE3wCCrvRdXlvIeEYxTPg897I&signed_in=true&libraries=places&callback=initMap')
   
   
   

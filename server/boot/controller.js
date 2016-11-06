@@ -402,7 +402,72 @@ module.exports = function(app){
 		});
 	})
 
-	
+	router.post('/editarEstacion', function(req,res){
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		res.cookie('idEstacionEditar', req.body.idEstacion);
+		var nombre;
+		var lat;
+		var lng;
+		Estacion.findById(req.body.idEstacion, function(err, instance){
+			if(err) return res.sendStatus(404);
+			console.log(instance);
+			nombre = instance.nombre;
+			lat = instance.geoPoint.lat;
+			lng = instance.geoPoint.lng;
+			return res.render('editarestacion',{
+				messageNombre : nombre,
+				messageLat : lat,
+				messageLng : lng
+			});
+		})
+		
+	})
+
+	router.post('/editarEstacion/confirm', function(req,res){
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		var idEstacionEdit = req.cookies.idEstacionEditar;
+		Estacion.updateAll({
+			id : idEstacionEdit
+		}, {
+			nombre : req.body.nombre,
+			geoPoint : {
+				lat : req.body.latitud,
+				lng : req.body.longitud
+			}
+		}, function(err, info){
+			if(err) return res.sendStatus(404);
+			console.log("exito ", info);
+			Estacion.find({
+				where : {
+				userId : req.cookies.accessToken.userId
+			}, include: ['usuario']
+			}, function(err, objResult_estacion) {
+				if(err) return res.sendStatus(404);
+				objResult_estacion = objResult_estacion.map(function(obj) {
+            	    return obj.toJSON();
+            	})
+            //console.log(objResult_estacion);
+			res.render('estaciones', {
+				objResult_estacion : objResult_estacion, 
+				message : 'Estacion editada exitosamente.'
+			})
+		})
+		});
+	})
+
+	router.post('/editarProducto', function(req,res){
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		return res.render('editarproducto');
+	})
 
 
 	//router.get('/productos', function(req,res){
