@@ -27,7 +27,7 @@ html
       //.ui.form
       if message != undefined
         p #{message}
-      form.ui.form(action='/editarProducto' method='post')
+      form#form_editar.ui.form(action='/editarProducto/confirm' method='post')
 
         .field
           .fields
@@ -39,22 +39,29 @@ html
           label Nombre
           .fields
             .six.wide.field
-              input(type='text' name='nombre' placeholder='Nombre')
+              input(type='text' name='nombre' placeholder='Nombre' value="#{messageNombre}")
 
 
         .field
           label Precio
           .fields
             .six.wide.field
-              input(type='text' name='precio' placeholder='Precio')
+              input(type='text' name='precio' placeholder='Precio' value="#{messagePrecio}")
 
 
         .ui.container#message
           if message != undefined
             p #{message}
         a.ui.black.button(href="/productos") Cancelar
-        input.ui.black.button(type='submit' value='Crear')
+        a#input_submit.ui.black.button Editar
 
+      .ui.small.modal
+        .header Editar Producto
+        .content ¿Esta seguro de editar este producto?
+        .actions
+          .ui.negative.button No
+          .ui.positive.right.labeled.icon.button Yes
+            i.checkmark.icon
   script.
     $(".form")
       .form({
@@ -78,7 +85,17 @@ html
         }
       });
 
-  
+  script.
+    $("#input_submit").on('click',function(){
+      $('.ui.small.modal')
+      .modal({
+        closable : false,
+        onApprove : function(){
+          $("#form_editar").submit();
+        }
+      })
+      .modal('show');
+    });
   
   
 //    a(href='/producto') Productos

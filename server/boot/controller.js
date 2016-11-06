@@ -466,6 +466,38 @@ module.exports = function(app){
 		});
 	})
 
+	router.post('/editarProducto/confirm', function(req,res){
+		if(!req.cookies.accessToken){
+			console.log('sin token');
+			return res.redirect('/');
+		}
+		var idProductoEdit = req.cookies.idProductoEditar;
+		Producto.updateAll({
+			id : idProductoEdit
+		}, {
+			nombre : req.body.nombre,
+			precio : req.body.precio
+		}, function(err, info){
+			if(err) return res.sendStatus(404);
+			console.log("exito", info);
+			Producto.find({
+				where : {
+					idEstacion : req.cookies.idEstacion
+				}, include: ['estacion']
+			}, function(err, objResult_producto) {
+				if(err) return res.sendStatus(404);
+				objResult_producto = objResult_producto.map(function(obj) {
+            	    return obj.toJSON();
+            	})
+            	
+				res.render('productos', {
+					objResult_producto : objResult_producto,
+					message : 'Producto editado exitosamente'
+				})
+			})
+		});
+	})
+
 	
 
 
