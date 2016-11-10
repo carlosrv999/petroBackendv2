@@ -81,8 +81,8 @@ html
                 th.ui.center.aligned #{estacion.geoPoint.lat}
                 th.ui.center.aligned #{estacion.geoPoint.lng}
       .ui.container#message
-          if message != undefined
-            p #{message}
+          
+            p#text_label #{message}
 
       a.ui.black.button#boton_probando Editar
       a.ui.black.button(href="/crearEstacion") Crear
@@ -135,7 +135,6 @@ html
       });
 
 
-
   script.
 
     //- var objResult = !{JSON.stringify(objResult_producto)};
@@ -175,6 +174,7 @@ html
     //- });
 
     $(".itemProd").on('click', function(){
+      $("#text_label").text("Seleccione la estacion de la cual quiere ver sus productos");
       $(".item_tr").css({
         'background-color': '#58FA82',
         'cursor' : 'pointer'

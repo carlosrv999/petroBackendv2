@@ -5,7 +5,7 @@ module.exports = function(app){
 	var Usuario = app.models.Usuario;
 	var Estacion = app.models.Estacion;
 	var Producto = app.models.Producto;
-	console.log("mierda");
+	
 	
 
 
@@ -28,7 +28,6 @@ module.exports = function(app){
 			password : password
 		}, function(err,userInstance){
 			if(err){
-				console.log(err);
 				return res.render('crearuser',{
                     modo: "noob",
                     mostrarTitulo: "Error en registro",
@@ -44,6 +43,7 @@ module.exports = function(app){
 	})
 
 	router.get('/login', function(req,res){
+		if(req.cookies.accessToken) return res.redirect('/estaciones');
 		return res.render('login');
 	})
 
@@ -63,10 +63,7 @@ module.exports = function(app){
 				})
 			}
 			res.cookie('accessToken', token);
-			console.log(req.cookies.accessToken);
-			return res.render('principal',{
-				accessToken: token.id
-			});
+			return res.redirect('/estaciones');
 		});
 	})
 
@@ -442,8 +439,8 @@ module.exports = function(app){
 		}, {
 			nombre : req.body.nombre,
 			geoPoint : {
-				lat : req.body.latitud,
-				lng : req.body.longitud
+				lat : Number(req.body.latitud),
+				lng : Number(req.body.longitud)
 			}
 		}, function(err, info){
 			if(err) return res.sendStatus(404);
