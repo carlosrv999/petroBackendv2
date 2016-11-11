@@ -119,7 +119,6 @@ module.exports = function(app){
 			objResult_estacion = objResult_estacion.map(function(obj) {
                 return obj.toJSON();
             })
-            console.log(objResult_estacion);
 			res.render('estaciones', {
 				objResult_estacion : objResult_estacion
 			})
@@ -140,7 +139,6 @@ module.exports = function(app){
 			objResult_producto = objResult_producto.map(function(obj) {
                 return obj.toJSON();
             })
-            console.log(objResult_producto);
 			res.render('productos', {
 				objResult_producto : objResult_producto
 			})
@@ -186,7 +184,6 @@ module.exports = function(app){
 			objResult_producto = objResult_producto.map(function(obj) {
                 return obj.toJSON();
             })
-            console.log(objResult_producto);
 			res.render('productos', {
 				objResult_producto : objResult_producto
 			})
@@ -309,7 +306,6 @@ module.exports = function(app){
 				objResult_producto = objResult_producto.map(function(obj) {
                 return obj.toJSON();
             })
-            console.log(objResult_producto);
 			res.render('productos', {
 				objResult_producto : objResult_producto
 			})
@@ -375,7 +371,6 @@ module.exports = function(app){
 				objResult_producto = objResult_producto.map(function(obj) {
             	    return obj.toJSON();
             	})
-            	console.log(objResult_producto);
 				res.render('productos', {
 					objResult_producto : objResult_producto
 				})
