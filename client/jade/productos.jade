@@ -60,7 +60,7 @@ html
 
             tr.ui.form.item_tr
               .inline.fields
-                th.ui.center.aligned 
+                td.ui.center.aligned 
                   .two.fields
                     .field
                       a
@@ -74,7 +74,7 @@ html
 
 
 
-                th.ui.center.aligned
+                td.ui.center.aligned
                   // MODO FUNCION
                   // -label(onClick="show('" + producto.nombre + "')" ) #{producto.nombre}
                   
@@ -82,7 +82,7 @@ html
                   label.label_show(attr_obj=JSON.stringify(producto)) #{producto.nombre}
                   -i=i+1
 
-                th.ui.center.aligned #{producto.precio}
+                td.ui.center.aligned #{producto.precio}
       .ui.container#message
           if message != undefined
             p #{message}

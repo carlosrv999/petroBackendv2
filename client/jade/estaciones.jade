@@ -45,13 +45,14 @@ html
       
       //---------QUITANDO EL FORMULARIO Y EL BOTON INPUT EDITAR
       //form(action='/producto/editar' method='post')
-      table.ui.sticky.table
+      table.ui.padded.table
         thead
           tr
             th.ui.center.aligned Id
             th.ui.center.aligned Nombre
             th.ui.center.aligned Latitud
             th.ui.center.aligned Longitud
+            th.ui.center.aligned Productos
             //th.ui.center.aligned Precio
             //th.ui.center.aligned Stock
           //  th.ui.center.aligned Descripcion
@@ -61,7 +62,7 @@ html
 
             tr.ui.form.item_tr(attr_id=estacion.id)
               .inline.fields
-                th.ui.center.aligned 
+                td.ui.center.aligned 
                   .two.fields
                     .field
                       a
@@ -70,7 +71,7 @@ html
                       i.trash.icon.icono_trash(attr_id=estacion.id)
                     label #{estacion.id}
 
-                th.ui.center.aligned
+                td.ui.center.aligned
                   // MODO FUNCION
                   // -label(onClick="show('" + producto.nombre + "')" ) #{producto.nombre}
                   
@@ -78,8 +79,10 @@ html
                   label.label_show(attr_obj=JSON.stringify(estacion)) #{estacion.nombre}
                   -i=i+1
 
-                th.ui.center.aligned #{estacion.geoPoint.lat}
-                th.ui.center.aligned #{estacion.geoPoint.lng}
+                td.ui.center.aligned #{estacion.geoPoint.lat}
+                td.ui.center.aligned #{estacion.geoPoint.lng}
+                td.ui.center.aligned
+                  a.ui.black.button.boton_prod(attr_id=estacion.id) Ver Productos
       .ui.container#message
           
             p#text_label #{message}
@@ -173,24 +176,14 @@ html
     //- $(".eliminar_icono").click(function() {
     //- });
 
-    $(".itemProd").on('click', function(){
-      $("#text_label").text("Seleccione la estacion de la cual quiere ver sus productos");
-      $(".item_tr").css({
-        'background-color': '#58FA82',
-        'cursor' : 'pointer'
-      });
-      $(".item_tr").hover(function(){
-        $(this).css("background-color", "yellow");
-        }, function(){
-        $(this).css("background-color", "#58FA82");
-      });
 
-      $(".item_tr").on('click', function(){
-        var idEstacionEdit = $(this).attr("attr_id");
-        $("#input_estacion_productos").attr("value",idEstacionEdit);
-        $("#form_estacion_productos").submit();
-      });
 
+
+    //ver productos
+    $(".boton_prod").on('click', function(){
+      var idEstacionEdit = $(this).attr("attr_id");
+      $("#input_estacion_productos").attr("value",idEstacionEdit);
+      $("#form_estacion_productos").submit();
     });
     //editar estacion
     $(".icono_write").on('click',function(){
