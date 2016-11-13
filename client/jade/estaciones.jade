@@ -30,7 +30,7 @@ html
       .rigth.menu
         .item
           .ui.icon.input
-            input(type='text' placeholder='search..')
+            input#myInput(type='text' placeholder='search..' onkeyup='busqueda()')
             i.search.icon
         .item
           a.ui.black.button(href="/logout") Log Out
@@ -45,7 +45,7 @@ html
       
       //---------QUITANDO EL FORMULARIO Y EL BOTON INPUT EDITAR
       //form(action='/producto/editar' method='post')
-      table.ui.padded.table
+      table#myTable.ui.padded.table
         thead
           tr
             th.ui.center.aligned Id
@@ -71,12 +71,7 @@ html
                       i.trash.icon.icono_trash(attr_id=estacion.id)
                     label #{estacion.id}
 
-                td.ui.center.aligned
-                  // MODO FUNCION
-                  // -label(onClick="show('" + producto.nombre + "')" ) #{producto.nombre}
-                  
-                  //- label.label_show(attr_nombre=producto.nombre, attr_id=producto.id, #{producto.nombre}
-                  label.label_show(attr_obj=JSON.stringify(estacion)) #{estacion.nombre}
+                td.ui.center.aligned #{estacion.nombre}
                   -i=i+1
 
                 td.ui.center.aligned #{estacion.geoPoint.lat}
@@ -127,6 +122,31 @@ html
           input#input_estacion_productos(name="idEstacion" type="hidden")
         form#form_estacion_editar(action="/editarEstacion" method="post")
           input#input_estacion_editar(name="idEstacion" type="hidden")
+
+
+  script.
+    function busqueda(){
+      var input, filter, table, tr, td, i;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      //console.log(filter);
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      
+      
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        //console.log(td);
+        if (td) {
+          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+    }
+
 
 
   script.
