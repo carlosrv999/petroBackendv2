@@ -14,7 +14,7 @@ html
         margin : 0 ;
       }
       #map{
-        height : 50%;
+        height : 60%;
         border : 1px solid green;
         z-index : 1;
       }
@@ -31,50 +31,101 @@ html
         .item
           a.ui.black.button(href="/logout") Log Out
 
-    //Formulario
+
 
     .ui.container
-      
-      //.ui.form
-      if message != undefined
-        p #{message}
-      form.ui.form(action='/crearEstacion' method='post')
+      .ui.two.column.aligned.very.relaxed.stackable.grid
+        .column
+          form#crear_estacion.ui.form(action='/crearEstacion' method='post')
+            input(type='hidden' name='userId' value=userId)
+            input#input_latitud(type='hidden' name='latitud' placeholder='Latitud')
+            input#input_longitud(type='hidden' name='longitud' placeholder='Longitud')
+            .field
+              .ui.dividing.header Nombre de la estacion
+              input#input_nombre(type='text' name='nombre' placeholder='Nombre')
+            .ui.dividing.header Seleccione los productos que vendera la estacion
+            table.ui.single.line.table
+              tbody
+                tr
+                  td.ui.center.aligned 
+                    #select_all.ui.checkbox
+                      input(type='checkbox')
+                  td Seleccionar todos los productos
+                tr
+                  td.ui.center.aligned 
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox', name="dieselpro", tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/dieselpro.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned Diesel Pro
+                tr
+                  td.ui.center.aligned
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox', name='dieselproeco', tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/dieselproeco.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned Diesel Pro Eco
+                tr
+                  td.ui.center.aligned
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox', name='gas90', tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/gas90.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned Gasolina 90
+                tr
+                  td.ui.center.aligned
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox',name='gas95', tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/gas95.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned Gasolina 95
+                tr
+                  td.ui.center.aligned
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox',name='gas98', tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/gas98.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned Gasolina 98
+                tr
+                  td.ui.center.aligned
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox',name='glp', tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/GLP.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned GLP
+                tr
+                  td.ui.center.aligned
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox',name='gnv', tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/GNV.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned GNV
+                tr
+                  td.ui.center.aligned
+                    .ui.checkbox.ls
+                      input.hidden(type='checkbox',name='repshop', tabindex='0')
+                  td.ui.center.aligned
+                    img(src='../css/img/repshop.jpg', alt='Mountain View', style='width:100px;height:25px;')
+                  td.ui.center.aligned Repshop
 
-        .field
-          .fields
-            .six.wide.field
-              input(type='hidden' name='userId' value=userId)
-
-
-        .field
-          label Nombre
-          .fields
-            .six.wide.field
-              input(type='text' name='nombre' placeholder='Nombre')
-        
-        
-
-        .field
-          label Latitud
-          .fields
-            .six.wide.field
-              input#input_latitud(type='text' name='latitud' placeholder='Latitud' readonly)
-
-        .field
-          label Longitud
-          .fields
-            .six.wide.field
-              input#input_longitud(type='text' name='longitud' placeholder='Longitud' readonly)
-
-        .ui.container#message
-          if message != undefined
-            p #{message}
-        
-        a.ui.black.button(href="/estaciones") Cancelar
-        input#input_submit.ui.black.button(type='submit' value='Crear' disabled)
-        label#label_mapa Seleccione la ubicacion de la estacion
-
+        .column 
+          label.ui.dividing.header Seleccione la ubicacion de la estacion
+          #map
+          .ui.icon.message
+            a.ui.black.button(href="/estaciones") Cancelar
+            input#input_submit.ui.black.button(type='submit' value='Crear' disabled)
+            i#exito_mapa.notched.circle.loading.icon
+            .content
+              .header#label_mapa
+                | Seleccione la ubicacion de la estacion
   script.
+    $('#input_submit').on('click', function(){
+      $('#crear_estacion').submit();
+    });
+      
+  script.
+    $('.ui.checkbox')
+      .checkbox();
     $(".form")
       .form({
         inline:true,
@@ -104,7 +155,14 @@ html
         }
       });
   
-  #map
+  script.
+    $('#select_all').checkbox({
+      onChecked(){
+        $('.ui.checkbox.ls').checkbox('check');
+      }, onUnchecked(){
+        $('.ui.checkbox.ls').checkbox('uncheck');
+      }
+    });
   script.
     
     var mapGoogle = document.getElementById('map');
@@ -134,6 +192,7 @@ html
         longitud = event.latLng.lng();
         $("#input_latitud").attr("value",latitud);
         $("#input_longitud").attr("value",longitud);
+        $('#exito_mapa').removeClass('notched circle loading icon').addClass('checkmark icon');
         deleteMarkers();
         addMarker(event.latLng);
       });

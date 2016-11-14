@@ -54,17 +54,9 @@ html
         
         
 
-        .field
-          label Latitud
-          .fields
-            .six.wide.field
-              input#input_latitud(type='text' name='latitud' placeholder='Latitud' value = "#{messageLat}" readonly)
 
-        .field
-          label Longitud
-          .fields
-            .six.wide.field
-              input#input_longitud(type='text' name='longitud' placeholder='Longitud' value = "#{messageLng}" readonly)
+              input#input_latitud(type='hidden' name='latitud' placeholder='Latitud' value = "#{messageLat}")
+              input#input_longitud(type='hidden' name='longitud' placeholder='Longitud' value = "#{messageLng}")
 
         .ui.container#message
           if message != undefined

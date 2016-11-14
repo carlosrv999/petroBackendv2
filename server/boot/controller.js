@@ -236,7 +236,7 @@ module.exports = function(app){
 			console.log('sin token');
 			return res.redirect('/');
 		}
-
+		
 		var idUsuario = req.cookies.accessToken.userId;
 		var nombre = req.body.nombre;
 		var latitud = req.body.latitud;
@@ -255,7 +255,102 @@ module.exports = function(app){
 					message : 'error en crear'
 				})
 			}
-			console.log(obj);
+            if(req.body.dieselpro){
+            	Producto.create({
+					nombre : 'Diesel Pro',
+					precio : 13.24,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+            }
+			if(req.body.dieselproeco){
+				Producto.create({
+					nombre : 'Diesel Pro Eco',
+					precio : 12.11,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+			}
+			if(req.body.gas90){
+				Producto.create({
+					nombre : 'Gasolina 90',
+					precio : 11.25,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+			}
+			if(req.body.gas95){
+				Producto.create({
+					nombre : 'Gasolina 95',
+					precio : 11.98,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+			}
+			if(req.body.gas98){
+				Producto.create({
+					nombre : 'Gasolina 98',
+					precio : 12.80,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+			}
+			if(req.body.glp){
+				Producto.create({
+					nombre : 'GLP',
+					precio : 1.24,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+			}
+			if(req.body.gnv){
+				Producto.create({
+					nombre : 'GNV',
+					precio : 1.44,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+			}
+			if(req.body.repshop){
+				Producto.create({
+					nombre : 'RepShop',
+					precio : 0,
+					idEstacion : obj.id
+				}, function(err, obj){
+					if(err) {
+						console.log('error en : ', err);
+						return res.sendStatus(404);
+					}
+				});
+			}
 			Estacion.find({
 				where : {
 				userId : req.cookies.accessToken.userId
@@ -264,8 +359,7 @@ module.exports = function(app){
 					if(err) return res.sendStatus(404);
 					objResult_estacion = objResult_estacion.map(function(obj) {
 	            	    return obj.toJSON();
-	            	})
-	            //console.log(objResult_estacion);
+	            	});
 				res.render('estaciones', {
 					objResult_estacion : objResult_estacion, 
 					message : 'Estacion creada exitosamente.'

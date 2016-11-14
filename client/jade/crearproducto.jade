@@ -28,11 +28,8 @@ html
       if message != undefined
         p #{message}
       form.ui.form(action='/crearProducto' method='post')
-
-        .field
-          .fields
-            .six.wide.field
-              input(type='hidden' name='userId' value=userId)
+        .ui.dividing.header Informacion de Producto
+          input(type='hidden' name='userId' value=userId)
 
 
         .field
