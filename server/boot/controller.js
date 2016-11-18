@@ -5,9 +5,6 @@ module.exports = function(app){
 	var Usuario = app.models.Usuario;
 	var Estacion = app.models.Estacion;
 	var Producto = app.models.Producto;
-	
-	
-
 
 	router.get('/', function(req,res){
 		console.log('cookies : ',req.cookies);
@@ -78,29 +75,6 @@ module.exports = function(app){
 			res.redirect('/');
 		})
 	})
-/*
-	router.get('/usuarioConEstacion', function(req,res){
-		Usuario.findById('580c0bec1138d99f0c89d5d6',{
-			include : 'estacions'
-		}, function(err, obj){
-			if(err)return console.log('error:',err);
-			else return res.json(obj);
-		});
-	})*/
-
-	/*router.get('/crear', function(req,res){
-		Estacion.create({
-			nombre : 'cacapedo',
-			geoPoint : {
-				lat : -44.141414,
-				lng : -22.555555
-			},
-			userId : '580c0bec1138d99f0c89d5d6'
-		} , function(err, obj){
-			if(err)return console.log("error en : ",err);
-			return res.json(obj);
-		})
-	})*/
 
 	router.get('/estaciones', function(req,res){
 
@@ -108,21 +82,33 @@ module.exports = function(app){
 			console.log('sin token');
 			return res.redirect('/');
 		}
-		console.log(req.cookies.accessToken.userId);
-		
-		Estacion.find({
-			where : {
-				userId : req.cookies.accessToken.userId
-			}, include: ['usuario']
-		}, function(err, objResult_estacion) {
-			if(err) return res.sendStatus(404);
-			objResult_estacion = objResult_estacion.map(function(obj) {
-                return obj.toJSON();
-            })
-			res.render('estaciones', {
-				objResult_estacion : objResult_estacion
+		if(req.cookies.accessToken.userId == '582f5f95f576f1d9096887cb'){
+			Estacion.find({
+				include: ['usuario']
+			}, function(err, objResult_estacion) {
+				if(err) return res.sendStatus(404);
+				objResult_estacion = objResult_estacion.map(function(obj) {
+	                return obj.toJSON();
+	            })
+				res.render('estaciones', {
+					objResult_estacion : objResult_estacion
+				})
 			})
-		})
+		} else {
+			Estacion.find({
+				where : {
+					userId : req.cookies.accessToken.userId
+				}, include: ['usuario']
+			}, function(err, objResult_estacion) {
+				if(err) return res.sendStatus(404);
+				objResult_estacion = objResult_estacion.map(function(obj) {
+	                return obj.toJSON();
+	            })
+				res.render('estaciones', {
+					objResult_estacion : objResult_estacion
+				})
+			})
+		}
 	})
 	
 	router.get('/productos', function(req,res){
