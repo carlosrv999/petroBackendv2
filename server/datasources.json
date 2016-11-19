@@ -8,5 +8,22 @@
     "name": "easyPetro",
     "user": "",
     "connector": "mongodb"
+  },
+  "Email": {
+    "name": "Email",
+    "defaultForType": "mail",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "smtp.gmail.com",
+        "secure": true,
+        "port": 465,
+        "auth": {
+          "user": "easypetromaster@gmail.com",
+          "pass": "carlitos11"
+        }
+      }
+    ]
   }
 }

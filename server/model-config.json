@@ -15,7 +15,7 @@
   },
   "AccessToken": {
     "dataSource": "easyPetro",
-    "public": false
+    "public": true
   },
   "ACL": {
     "dataSource": "easyPetro",
@@ -31,6 +31,10 @@
   },
   "Producto": {
     "dataSource": "easyPetro",
+    "public": true
+  },
+  "Correo": {
+    "dataSource": "Email",
     "public": true
   }
 }

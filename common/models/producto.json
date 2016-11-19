@@ -12,8 +12,8 @@
     "precio": {
       "type": "number"
     },
-    "idEstacion" : {
-      "type" : "string"
+    "idEstacion": {
+      "type": "string"
     }
   },
   "validations": [],

@@ -5,6 +5,8 @@ module.exports = function(app){
 	var Usuario = app.models.Usuario;
 	var Estacion = app.models.Estacion;
 	var Producto = app.models.Producto;
+	var AccessToken = app.models.AccessToken;
+	var Correo = app.models.Correo;
 
 	router.get('/', function(req,res){
 		console.log('cookies : ',req.cookies);
@@ -44,6 +46,93 @@ module.exports = function(app){
 		return res.render('login');
 	})
 
+	router.get('/recuperarPass', function(req,res){
+		return res.render('recuperarcontrasena');
+	})
+
+	router.post('/recuperarPass', function(req,res){
+		var email = req.body.form_email;
+		console.log('email: ', email);
+		
+		Usuario.findOne({
+			where:{
+				email: email
+			}
+		}, function(err, ObjUsuario) {
+			if(err) return res.sendStatus(404);
+			else if(ObjUsuario == null) {
+				return res.render('recuperarcontrasena', {
+					mostrarMensaje : "La direccion de correo no existe", 
+					mostrarTitulo : "Error Usuario"
+				});
+			} else {
+				Usuario.resetPassword({
+					email : email
+				}, function(err) {
+					if(err) return res.sendStatus(404);
+					return res.render('recuperarcontrasena', {
+						mostrarTitulo : "Cambio de password", 
+						mostrarMensaje : "Revise su email"
+					});
+				});
+			}
+		});
+	})
+
+	router.get('/cambiarPass', function(req,res){
+		AccessToken.findById(req.query.access_token, function(err, instance) {
+			if(err) {
+				console.log(err);
+				return res.sendStatus(404);
+			} else if(instance == null) {
+				return res.json({ message : "el link ha expirado" });
+			} else {
+				Usuario.findById(instance.userId, function(err, instanceUser) {
+					if(err) return res.sendStatus(404);
+					else if(instanceUser == null){
+						return res.json({ message : 'El usuario no existe' });
+					} else {
+						console.log(instanceUser.email);
+						return res.render('cambiarcontrasena', {
+							mostrarTitulo : 'Crear una nueva clave para:',
+							mostrarMensaje : instanceUser.email,
+							messageTok : req.query.access_token
+						});
+					}
+				})
+			}
+		})
+	});
+
+	router.post('/cambiarPass', function(req,res){
+		AccessToken.findById(req.body.access_tok, function(err, instance) {
+			if(err) {
+				console.log(err);
+				return res.sendStatus(404);
+			} else if(instance == null) {
+				return res.json({ message : "el link ha expirado" });
+			} else {
+				Usuario.findById(instance.userId, function(err, instanceUser) {
+					if(err) return res.sendStatus(404);
+					else if(instanceUser == null){
+						return res.json({ message : "El usuario no existe" });
+					} else {
+						console.log("antes:");
+						console.log(instanceUser);
+						instanceUser.password = req.body.password;
+						instanceUser.save();
+						console.log("despues:");
+						console.log(instanceUser);
+						return res.render('login', {
+							mostrarTitulo : 'Contrasena modificada',
+							mostrarMensaje : 'Ya puede iniciar sesion',
+						});
+					}
+				})
+			}
+		})
+	})
+
 	router.post('/login', function(req,res){
 		var correo = req.body.form_email;
 		var password = req.body.form_password;
@@ -59,6 +148,10 @@ module.exports = function(app){
                     mostrarMensaje: "El usuario y/o password no son correctos"
 				})
 			}
+			AccessToken.find(function(err, obj){
+				if(err) return res.sendStatus(404);
+				console.log(obj);
+			});
 			res.cookie('accessToken', token);
 			return res.redirect('/estaciones');
 		});
