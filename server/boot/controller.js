@@ -175,7 +175,7 @@ module.exports = function(app){
 			console.log('sin token');
 			return res.redirect('/');
 		}
-		if(req.cookies.accessToken.userId == '582f5f95f576f1d9096887cb'){
+		if(req.cookies.accessToken.userId == '582f64f336957b6a0afb0e4d'){
 			Estacion.find({
 				include: ['usuario']
 			}, function(err, objResult_estacion) {
