@@ -148,10 +148,6 @@ module.exports = function(app){
                     mostrarMensaje: "El usuario y/o password no son correctos"
 				})
 			}
-			AccessToken.find(function(err, obj){
-				if(err) return res.sendStatus(404);
-				console.log(obj);
-			});
 			res.cookie('accessToken', token);
 			return res.redirect('/estaciones');
 		});
