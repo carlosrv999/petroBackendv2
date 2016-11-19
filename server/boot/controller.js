@@ -70,7 +70,7 @@ module.exports = function(app){
 					email : email
 				}, function(err) {
 					if(err) return res.sendStatus(404);
-					return res.render('recuperarcontrasena', {
+					return res.render('login', {
 						mostrarTitulo : "Cambio de password", 
 						mostrarMensaje : "Revise su email"
 					});
