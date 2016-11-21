@@ -11,6 +11,12 @@
     },
     "password": {
       "type": "string"
+    },
+    "razonsocial": {
+      "type": "string"
+    },
+    "telefono": {
+      "type": "string"
     }
   },
   "validations": [],

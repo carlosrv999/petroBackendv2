@@ -24,17 +24,17 @@ module.exports = function(app){
 		//console.log(password);
 		Usuario.create({
 			email : correo,
-			password : password
+			password : password,
+			razonsocial : req.body.razon_social,
+			telefono : req.body.telefono
 		}, function(err,userInstance){
 			if(err){
 				return res.render('crearuser',{
-                    modo: "noob",
                     mostrarTitulo: "Error en registro",
                     mostrarMensaje: "El email ya esta registrado",
                 });
 			}
 			return res.render('login', {
-				modo: "gggggg",
                 mostrarTitulo: "Registro exitoso",
                 mostrarMensaje: "Ya puede inicial sesion"
 			})
