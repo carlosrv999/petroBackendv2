@@ -27,6 +27,8 @@ html
       //.ui.form
       if message != undefined
         p #{message}
+
+        
       form#form_editar.ui.form(action='/editarProducto/confirm' method='post')
 
         .field
@@ -39,7 +41,7 @@ html
           label Nombre
           .fields
             .six.wide.field
-              input(type='text' name='nombre' placeholder='Nombre' value="#{messageNombre}")
+              input(type='text' name='nombre' placeholder='Nombre' value="#{messageNombre}" readonly)
 
 
         .field

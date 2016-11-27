@@ -31,13 +31,12 @@ html
         .ui.dividing.header Informacion de Producto
           input(type='hidden' name='userId' value=userId)
 
-
         .field
-          label Nombre
-          .fields
-            .six.wide.field
-              input(type='text' name='nombre' placeholder='Nombre')
-
+          label Nombre del Producto  
+          select.ui.dropdown(name='nombreprod')
+            option(value='') Producto
+            each producto in objResult_producto
+              option(value='#{producto}') #{producto}
 
         .field
           label Precio
@@ -52,24 +51,29 @@ html
         a.ui.black.button(href="/productos") Cancelar
         input.ui.black.button(type='submit' value='Crear')
 
+
+  script.
+    $('.ui.dropdown')
+      .dropdown()
+    ;
   script.
     $(".form")
       .form({
         inline:true,
         on:'blur',
         fields:{
-          nombre:{
-            identifier:'nombre',
-            rules:[{
-              type:'empty',
-              prompt:'Ingrese un nombre'
-            }]
-          },
           latitud:{
             identifier:'precio',
             rules:[{
               type:'number',
               prompt:'Ingrese un numero decimal(ejemplo: -40.50 )'
+            }]
+          },
+          nombreprod:{
+            identifier:'nombreprod',
+            rules:[{
+              type   : 'empty',
+              prompt : 'Seleccione un producto'
             }]
           }
         }

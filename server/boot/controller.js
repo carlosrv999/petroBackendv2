@@ -259,7 +259,7 @@ module.exports = function(app){
 			objResult_producto = objResult_producto.map(function(obj) {
                 return obj.toJSON();
             })
-			res.render('productos', {
+			return res.render('productos', {
 				objResult_producto : objResult_producto
 			})
 		})
@@ -294,6 +294,28 @@ module.exports = function(app){
 		
 		res.render('crearestacion');
 	})
+/*
+var arrayprod = ['Diesel Pro', 'Diesel Pro Eco', 'Gasolina 90', 'Gasolina 95', 'Gasolina 98',
+        	'GLP', 'GNV', 'RepShop'];
+        	var arr = [];
+        	console.log(arrayprod);
+			Producto.findById(req.body.idProducto, function(err, instance){
+				if(err) return res.sendStatus(404);
+				objResult_producto.forEach(function(item,index){
+					var ind = arrayprod.indexOf(item.nombre);
+					if ( ind > -1 ){
+						arrayprod.splice(ind, 1);
+					}
+				});
+				nombre = instance.nombre;
+				precio = instance.precio;
+				return res.render('editarproducto',{
+					messageNombre : nombre,
+					messagePrecio : precio,
+					objResult_producto : arrayprod
+				});
+			})
+		})*/
 
 	router.get('/crearProducto', function(req,res){
 		
@@ -301,8 +323,28 @@ module.exports = function(app){
 			console.log('sin token');
 			return res.redirect('/');
 		}
-		
-		res.render('crearproducto');
+		var arrayprod = ['Diesel Pro', 'Diesel Pro Eco', 'Gasolina 90', 'Gasolina 95', 'Gasolina 98',
+        	'GLP', 'GNV', 'RepShop'];
+        var arr = [];
+        Producto.find({
+				where : {
+					idEstacion : req.cookies.idEstacion
+				}, include: ['estacion']
+			}, function(err, objResult_producto) {
+					if(err) return res.sendStatus(404);
+					objResult_producto = objResult_producto.map(function(obj) {
+	                return obj.toJSON();
+	            })
+				objResult_producto.forEach(function(item,index){
+					var ind = arrayprod.indexOf(item.nombre);
+					if ( ind > -1 ){
+						arrayprod.splice(ind, 1);
+					}
+				});
+				return res.render('crearproducto', {
+					objResult_producto : arrayprod
+				});
+		})
 	})
 
 	router.post('/crearEstacion', function(req,res){
@@ -452,7 +494,7 @@ module.exports = function(app){
 			return res.redirect('/');
 		}
 		var idEstacion = req.cookies.idEstacion;
-		var nombre = req.body.nombre;
+		var nombre = req.body.nombreprod;
 		var precio = req.body.precio;
 		Producto.create({
 			nombre : nombre,
@@ -465,7 +507,6 @@ module.exports = function(app){
 					message : 'error en crear'
 				})
 			}
-			console.log(obj);
 			Producto.find({
 				where : {
 					idEstacion : idEstacion
@@ -559,7 +600,6 @@ module.exports = function(app){
 		var lng;
 		Estacion.findById(req.body.idEstacion, function(err, instance){
 			if(err) return res.sendStatus(404);
-			console.log(instance);
 			nombre = instance.nombre;
 			lat = instance.geoPoint.lat;
 			lng = instance.geoPoint.lng;
@@ -580,15 +620,34 @@ module.exports = function(app){
 		res.cookie('idProductoEditar', req.body.idProducto);
 		var nombre;
 		var precio;
-		Producto.findById(req.body.idProducto, function(err, instance){
+		Producto.find({
+			where : {
+				idEstacion : req.cookies.idEstacion
+			}, include: ['estacion']
+		}, function(err, objResult_producto) {
 			if(err) return res.sendStatus(404);
-			console.log(instance);
-			nombre = instance.nombre;
-			precio = instance.precio;
-			return res.render('editarproducto',{
-				messageNombre : nombre,
-				messagePrecio : precio
-			});
+			objResult_producto = objResult_producto.map(function(obj) {
+        	    return obj.toJSON();
+        	})
+        	var arrayprod = ['Diesel Pro', 'Diesel Pro Eco', 'Gasolina 90', 'Gasolina 95', 'Gasolina 98',
+        	'GLP', 'GNV', 'RepShop'];
+        	var arr = [];
+			Producto.findById(req.body.idProducto, function(err, instance){
+				if(err) return res.sendStatus(404);
+				objResult_producto.forEach(function(item,index){
+					var ind = arrayprod.indexOf(item.nombre);
+					if ( ind > -1 ){
+						arrayprod.splice(ind, 1);
+					}
+				});
+				nombre = instance.nombre;
+				precio = instance.precio;
+				return res.render('editarproducto',{
+					messageNombre : nombre,
+					messagePrecio : precio,
+					objResult_producto : arrayprod
+				});
+			})
 		})
 	})
 
