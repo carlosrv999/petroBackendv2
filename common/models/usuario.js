@@ -2,7 +2,7 @@
 
 module.exports = function(Usuario) {
 	Usuario.on('resetPasswordRequest', function (info) {
-		var url = 'http://192.168.2.105'+':3000'+'/cambiarPass';
+		var url = 'http://54.162.242.52'+':3000'+'/cambiarPass';
 		console.log(url);
 		var html = 'Click <a href="'+url+'?access_token='+info.accessToken.id+'">Aqui</a> para resetear tu password' ;
 		console.log(info.email); // the email of the requested user
