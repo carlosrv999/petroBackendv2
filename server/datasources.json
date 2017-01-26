@@ -3,7 +3,7 @@
     "host": "localhost",
     "port": 27017,
     "url": "",
-    "database": "easyPetroDb",
+    "database": "cocherasDb",
     "password": "",
     "name": "easyPetro",
     "user": "",

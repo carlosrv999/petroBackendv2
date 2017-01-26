@@ -221,14 +221,14 @@ module.exports = function(app){
 		
 	})
 	
-	router.get('/obtenerTodaEstacion', function(req,res){
+	router.get('/obtener-toda-cochera', function(req,res){
 		Estacion.find({}, function(err, instances){
 			if(err) return console.log("error: ", err);
 			return res.json(instances);
 		})
 	})
 	
-	router.get('/productosjson', function(req,res){
+	router.get('/productos-json', function(req,res){
 		var idEstacion = req.query.idEstacion;
 		Producto.find({
 			where : {

@@ -21,7 +21,7 @@ html
   body
     .ui.large.top.menu
       .ui.container
-        a.item(href="/estaciones") Estaciones
+        a.item(href="/estaciones") Cocheras
         a.item Productos
       .rigth.menu
         .item
@@ -41,9 +41,9 @@ html
             input#input_latitud(type='hidden' name='latitud' placeholder='Latitud')
             input#input_longitud(type='hidden' name='longitud' placeholder='Longitud')
             .field
-              .ui.dividing.header Nombre de la estacion
+              .ui.dividing.header Nombre de la Cochera
               input#input_nombre(type='text' name='nombre' placeholder='Nombre')
-            .ui.dividing.header Seleccione los productos que vendera la estacion
+            .ui.dividing.header Seleccione los productos que vendera la cochera
             table.ui.single.line.table
               tbody
                 tr
@@ -109,7 +109,7 @@ html
                   td.ui.center.aligned Repshop
 
         .column 
-          label.ui.dividing.header Seleccione la ubicacion de la estacion
+          label.ui.dividing.header Seleccione la ubicacion de la cochera
           #map
           .ui.icon.message
             a.ui.black.button(href="/estaciones") Cancelar
@@ -117,7 +117,7 @@ html
             i#exito_mapa.notched.circle.loading.icon
             .content
               .header#label_mapa
-                | Seleccione la ubicacion de la estacion
+                | Seleccione la ubicacion de la cochera
   script.
     $('#input_submit').on('click', function(){
       $('#crear_estacion').submit();
